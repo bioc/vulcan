@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: vulcan\nType: Package\nTitle: VirtUaL ChIP-Seq data Analysis using Networks\nVersion: 0.99.0\nAuthor: Federico M. Giorgi\nMaintainer: Federico M. Giorgi <federico.giorgi@gmail.com>\nDescription: This package interrogates regulatory networks to infer cofactors\n    significantly enriched in a differential binding signature coming from\n    ChIP-Seq data\nLicense: LGPL-3\nLazyData: TRUE\nbiocViews: ExperimentData, Genome, Homo_sapiens_Data, CancerData\nNeedsCompilation: no\nDepends: R (>= 3.3), IRanges, DiffBind, viper, ChIPpeakAnno, gplots,\n    TxDb.Hsapiens.UCSC.hg19.knownGene, DESeq, zoo, wordcloud, csaw\nEncoding: UTF-8\nRoxygenNote: 6.0.1\n",
+    "created" : 1495461379507.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1989735417",
+    "id" : "1ABDC8B3",
+    "lastKnownWriteTime" : 1495648241,
+    "last_content_update" : 1495648241038,
+    "path" : "~/Dropbox/rstudio/vulcanpackage/vulcan/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 10,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}

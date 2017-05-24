@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#' REA: Rank EnrichmeNt Analysis\n#'\n#' REA Calculates enrichment of groups of objects over a vector of values associated to a population of objects\n#'\n#' @param signatures a named vector, with values as signature values (e.g. logFC) and names as object names (e.g. gene symbols)\n#' @param groups a list of vectors of objects (e.g. pathways)\n#' @param sweights weights associated to objects in the signature. If NULL (default) all objects are treated according to the signature rank\n#' @param gweights weights associated to association strength between each object and each group. If NULL (default) all associations are treated equally\n#' @param minsize integer. Minimum size of the groups to be analyzed. Default=1\n#'\n#' @examples\n#'\n#' @export\nrea<-function(\n  signatures,\n  groups,\n  minsize=1\n){\n  ### Remove small groups\n  groups<-groups[sapply(groups,length)>=minsize]\n\n  ### Treat single \"signature\"\n  if (is.null(nrow(signatures))){\n    signatures <- matrix(signatures, length(signatures), 1, dimnames=list(names(signatures), \"sample1\"))\n  }\n\n\n  ### Generate dummy signature weights\n  if(is.null(sweights)){\n    sweights<-matrix(1,nrow=nrow(signatures),ncol=ncol(signatures))\n    dimnames(sweights)<-dimnames(signatures)\n  }\n  if(!identical(dim(signatures), dim(sweights))){\n    stop(\"Signatures and Signature weights must be matrices of identical size\")\n  }\n\n  ### Generate dummy group weights\n  if(is.null(gweights)){\n    gweights<-relist(rep(1,sum(sapply(groups,length))),skeleton=groups)\n  }\n\n  ### Apply weights to group belonging\n  wgroups<-gweights\n  for(i in 1:length(wgroups)){\n    names(wgroups[[i]])<-groups[[i]]\n  }\n  rm(gweights)\n\n  ### Rank-transform columns\n  ranks<-apply(signatures,2,rank,na.last=\"keep\")\n  ### Assign a 0 to signature weights where the signature was NA\n  sweights[is.na(ranks)]<-0\n  ### 0-1 bound ranks\n  boundranks<-t(t(ranks)/(colSums(!is.na(signatures))+1))\n  ### Treat bound ranks as quantiles in a gaussian distribution (0=-Inf, 1=+Inf)\n  gaussian <- qnorm(boundranks)\n  ### Deal with NAs\n  gaussian[is.na(gaussian)]<-0\n\n  ### Apply signature weights to the normalized distribution\n  gaussian<-gaussian*sweights\n\n\n  ### Next, we see how each of the groups are behaving in these normalized signatures\n  ### Create a boolean matrix with ngroup columns and signaturelength rows, indicating the matches\n  matches <- sapply(wgroups, function(group, allElements) {\n    hereMatches<-as.integer(allElements%in%names(group))\n    names(hereMatches)<-allElements\n    # Weigth by group belonging\n    weightedMatches<-hereMatches\n    weightedMatches[names(group)]<-weightedMatches[names(group)]*group\n    return(weightedMatches)\n  }, allElements=rownames(gaussian))\n  # And then transpose it\n  matches<-t(matches)\n  colnames(matches)<-rownames(signatures)\n\n  # Number of matches per group\n  groupmatches <- rowSums(matches)\n\n  # Relative part of the signature that matches\n  relativematches<-matches/groupmatches\n\n  # This trick will overweight massively small groups with all their components highly-ranked.\n  # Extreme case is with a group with one gene at the top\n\n  # The core linear algebra operation. The true magic of rea\n  enrichmentScore <- relativematches %*% gaussian\n\n  # Finally, every enrichment is square-rooted to respect the criterion of normality\n  normalizedEnrichmentScore<-enrichmentScore*sqrt(groupmatches)\n\n  # Return output\n  return(normalizedEnrichmentScore)\n}\n\n\n\n\n",
+    "created" : 1495143548623.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1838081453",
+    "id" : "F49C61EA",
+    "lastKnownWriteTime" : 1495121536,
+    "last_content_update" : 1495121536,
+    "path" : "D:/Dropbox/rstudio/vulcanpackage/vulcan/R/rea.R",
+    "project_path" : "R/rea.R",
+    "properties" : {
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
