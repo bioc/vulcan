@@ -16,6 +16,7 @@ a list
 This function normalizes gene-centered ChIP-Seq data using VST
 }
 \examples{
+require(vulcandata)
 vfile<-"deleteme.csv"
 vulcansheet(vfile)
 vobj<-vulcan.import(vfile)

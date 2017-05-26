@@ -11,6 +11,7 @@
 #' @return a list
 #'
 #' @examples
+#' require(vulcandata)
 #' vfile<-"deleteme.csv"
 #' vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
@@ -101,6 +102,7 @@ vulcan.import<-function(sheetfile,intervals=NULL){
 #' the Transcription starting site (default: 10000)
 #' @return a list
 #' @examples
+#' require(vulcandata)
 #' vfile<-"deleteme.csv"
 #' vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
@@ -387,6 +389,7 @@ vulcan.annotate<-function(vobj,lborder=-10000,rborder=10000,
 #' @return a list
 #'
 #' @examples
+#' require(vulcandata)
 #' vfile<-"deleteme.csv"
 #' vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
@@ -433,6 +436,7 @@ vulcan.normalize<-function(vobj){
 #' @return a list
 #'
 #' @examples
+#' require(vulcandata)
 #' # Generate an annotation file from the dummy ChIP-Seq dataset
 #' vfile<-"deleteme.csv"
 #' vulcansheet(vfile)

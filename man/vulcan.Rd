@@ -26,6 +26,7 @@ This function calculates the enrichment of a gene regulatory network over a
 ChIP-Seq derived signature
 }
 \examples{
+require(vulcandata)
 # Generate an annotation file from the dummy ChIP-Seq dataset
 vfile<-"deleteme.csv"
 vulcansheet(vfile)

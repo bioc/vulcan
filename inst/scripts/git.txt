@@ -4,3 +4,8 @@ git add --all
 git commit -m "First Commit"
 git remote add origin https://github.com/federicogiorgi/vulcan.git
 git push -u origin master
+
+cd /Users/giorgi01/Dropbox/rstudio/vulcanpackage/vulcan
+git commit -m "Update"
+git push -u origin master
+
