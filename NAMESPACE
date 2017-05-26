@@ -24,3 +24,7 @@ export(vulcan.import)
 export(vulcan.normalize)
 export(wstouffer)
 export(z2p)
+import(viper)
+import(zoo)
+import(IRanges)
+
