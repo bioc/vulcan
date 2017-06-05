@@ -11,8 +11,9 @@
 \affil[1]{Cancer Research UK, Cambridge Institute, Robinson Way, Cambridge United Kingdom}
 \date{\today}
 
+\usepackage{Sweave}
 \begin{document}
-\SweaveOpts{concordance=TRUE}
+\input{vulcan-concordance}
 \maketitle
 
 %-----------
@@ -28,72 +29,88 @@ Giorgi FM, Holding AN \& Markowetz F. Network Dynamics of early ER-alpha promote
 VULCAN requires the R-system (\url{http://www.r-project.org}), and the \emph{vulcandata} package to run the examples.
 After installing R, all required components can be obtained with:
 
-<<echo=FALSE, results=hide>>=
-set.seed(1)
-@
 
-<<echo=TRUE, results=hide, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("vulcandata")
-biocLite("vulcan")
-@
+\begin{Schunk}
+\begin{Sinput}
+> source("http://bioconductor.org/biocLite.R")
+> biocLite("vulcandata")
+> biocLite("vulcan")
+\end{Sinput}
+\end{Schunk}
 
 %----
 \section{Getting started}
 As first step, we have to load the vulcan package with:
-<<echo=TRUE, results=hide>>=
-library(vulcan)
-@
+\begin{Schunk}
+\begin{Sinput}
+> library(vulcan)
+\end{Sinput}
+\end{Schunk}
 Only to run the examples, a set of reduced BAM files can be accessed by loading the \emph{vulcandata} package:
-<<echo=TRUE, results=hide>>=
-library(vulcandata)
-@
+\begin{Schunk}
+\begin{Sinput}
+> library(vulcandata)
+\end{Sinput}
+\end{Schunk}
 
 
 %-------
 \section{Running an example VULCAN pipeline}
 
 \subsection{Generate a example annotation file}
-<<echo=TRUE, results=hide>>=
-# Generate an annotation file from the dummy ChIP-Seq dataset
-vfile<-"deleteme.csv"
-vulcansheet(vfile)
-@
+\begin{Schunk}
+\begin{Sinput}
+> # Generate an annotation file from the dummy ChIP-Seq dataset
+> vfile<-"deleteme.csv"
+> vulcansheet(vfile)
+\end{Sinput}
+\end{Schunk}
 
 \subsection{Import ChIP-Seq information}
-<<echo=TRUE, results=hide>>=
-# Import BAM and BED information into a list object
-vobj<-vulcan.import(vfile)
-unlink(vfile)
-@
+\begin{Schunk}
+\begin{Sinput}
+> # Import BAM and BED information into a list object
+> vobj<-vulcan.import(vfile)
+> unlink(vfile)
+\end{Sinput}
+\end{Schunk}
 
 \subsection{Annotate peaks}
-<<echo=TRUE, results=hide>>=
-# Annotate peaks to gene names
-vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
-@
+\begin{Schunk}
+\begin{Sinput}
+> # Annotate peaks to gene names
+> vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
+\end{Sinput}
+\end{Schunk}
 
 \subsection{Peak abundance normalization}
-<<echo=TRUE, results=hide>>=
-# Normalize data for VULCAN analysis
-vobj<-vulcan.normalize(vobj)
-# Detect which conditions are present in our imported object
-names(vobj$samples)
-@
+\begin{Schunk}
+\begin{Sinput}
+> # Normalize data for VULCAN analysis
+> vobj<-vulcan.normalize(vobj)
+> # Detect which conditions are present in our imported object
+> names(vobj$samples)
+\end{Sinput}
+\end{Schunk}
 
 \subsection{Load an ARACNe network}
 We will use a regulon object as specified in the \emph{viper} package, named "network"
-<<echo=TRUE, results=hide>>=
-load(system.file("extdata","network.rda",package="vulcan",mustWork=TRUE))
-@
+\begin{Schunk}
+\begin{Sinput}
+> load(system.file("extdata","network.rda",package="vulcan",mustWork=TRUE))
+\end{Sinput}
+\end{Schunk}
 
 \subsection{Run VULCAN}
 Once we have prepared 1) the ChIP-Seq annotated and normalized object and 2) a gene regulatory network, we can run the VULCAN pipeline.
 We can reduce the minimum regulon size, since in the \emph{vulcandata} example only one chromosome was used, and the networks would otherwise have too few hits. We can then visualize the output using the msviper plotting function
-<<echo=TRUE, results=hide, fig=TRUE>>=
-vobj_analysis<-vulcan(vobj,network=network,contrast=c("t90","t0"),minsize=5)
-plot(vobj_analysis$msviper,mrs=7)
-@
+\begin{Schunk}
+\begin{Sinput}
+> vobj_analysis<-vulcan(vobj,network=network,contrast=c("t90","t0"),minsize=5)
+> plot(vobj_analysis$msviper,mrs=7)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{vulcan-010}
 
 
 %-------
@@ -101,47 +118,56 @@ plot(vobj_analysis$msviper,mrs=7)
 
 \subsection{Gene Set Enrichment Analysis}
 VULCAN contains a GSEA (Subramanian et al., 2005) implementation that can fit a Pareto tail distribution for p-value estimation. In the following example, we generate an artificial signature of 1000 genes with normally-distributed positive expression. The gene set that is evaluated is composed by 50 genes randomly picked from one of the tails
-<<echo=TRUE, results=hide>>=
-reflist<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
-set<-paste0("gene",sample(1:200,50))
-obj<-gsea(reflist,set,method="pareto")
-obj$p.value
-@
+\begin{Schunk}
+\begin{Sinput}
+> reflist<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
+> set<-paste0("gene",sample(1:200,50))
+> obj<-gsea(reflist,set,method="pareto")
+> obj$p.value
+\end{Sinput}
+\end{Schunk}
 The GSEA object can be plotted
-<<echo=TRUE, results=hide, fig=TRUE>>=
-plot_gsea(obj)
-@
+\begin{Schunk}
+\begin{Sinput}
+> plot_gsea(obj)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{vulcan-012}
 
 \subsection{Rank Enrichment Analysis}
 Rank Enrichment Analysis (REA Calculates) enrichment of groups of objects over a vector of values associated to a population of objects using a linear algebraic matrix multiplication.
-<<echo=TRUE, results=hide>>=
-signatures<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
-set1<-paste0("gene",sample(1:200,50))
-set2<-paste0("gene",sample(1:1000,50))
-groups<-list(set1=set1,set2=set2)
-obj<-rea(signatures=signatures,groups=groups)
-obj
-@
+\begin{Schunk}
+\begin{Sinput}
+> signatures<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
+> set1<-paste0("gene",sample(1:200,50))
+> set2<-paste0("gene",sample(1:1000,50))
+> groups<-list(set1=set1,set2=set2)
+> obj<-rea(signatures=signatures,groups=groups)
+> obj
+\end{Sinput}
+\end{Schunk}
 
 
 \subsection{Convenience functions}
 The function \emph{kmgformat} will convert thousand numbers to K, millions to M, billions to G, trillions to T, quadrillions to P. The function \emph{val2col} converts a distribution of numbers to a distribution of colors.
-<<echo=TRUE, results=hide, fig=TRUE>>=
-par(mfrow=c(1,2))
-# Thousands
-set.seed(1)
-a<-runif(1000,0,1e4)
-plot(a,yaxt="n")
-kmg<-kmgformat(pretty(a))
-axis(2,at=pretty(a),labels=kmg)
-
-# Millions to Billions
-set.seed(1)
-a<-runif(1000,0,1e9)
-plot(a,yaxt="n",pch=20,col=val2col(a))
-kmg<-kmgformat(pretty(a))
-axis(2,at=pretty(a),labels=kmg)
-@
+\begin{Schunk}
+\begin{Sinput}
+> par(mfrow=c(1,2))
+> # Thousands
+> set.seed(1)
+> a<-runif(1000,0,1e4)
+> plot(a,yaxt="n")
+> kmg<-kmgformat(pretty(a))
+> axis(2,at=pretty(a),labels=kmg)
+> # Millions to Billions
+> set.seed(1)
+> a<-runif(1000,0,1e9)
+> plot(a,yaxt="n",pch=20,col=val2col(a))
+> kmg<-kmgformat(pretty(a))
+> axis(2,at=pretty(a),labels=kmg)
+\end{Sinput}
+\end{Schunk}
+\includegraphics{vulcan-014}
 
 
 %-----------
