@@ -8,6 +8,12 @@ dpareto(x, threshold = 1, exponent, log = FALSE)
 }
 \arguments{
 \item{x}{Data vector of log probability densities}
+
+\item{threshold}{numeric value to define the start of the tail}
+
+\item{exponent}{the exponent obtained from the pareto.fit function}
+
+\item{log}{logical, should the values be log-transformed?}
 }
 \value{
 Vector of (log) probability densities

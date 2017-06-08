@@ -1,7 +1,7 @@
 Package: vulcan
 Type: Package
 Title: VirtUaL ChIP-Seq data Analysis using Networks
-Version: 0.99.5
+Version: 0.99.6
 Author: Federico M. Giorgi, Andrew N. Holding, Florian Markowetz
 Maintainer: Federico M. Giorgi <federico.giorgi@gmail.com>
 Description: This package interrogates regulatory networks to infer cofactors

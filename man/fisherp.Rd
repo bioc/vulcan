@@ -7,7 +7,7 @@
 fisherp(ps)
 }
 \arguments{
-\item{x}{a vector of p-values}
+\item{ps}{a vector of p-values}
 }
 \value{
 p.val an integrated p-value

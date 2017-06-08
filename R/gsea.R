@@ -455,6 +455,9 @@ plot_gsea<-function(
 #' Gives NA on values below the threshold
 #'
 #' @param x Data vector of log probability densities
+#' @param threshold numeric value to define the start of the tail
+#' @param exponent the exponent obtained from the pareto.fit function
+#' @param log logical, should the values be log-transformed?
 #' @return Vector of (log) probability densities
 #' @examples
 #' set.seed(1)

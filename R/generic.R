@@ -66,7 +66,7 @@ wstouffer<-function(x,w){
 #'
 #' This function applies the Fisher integration of pvalues
 #'
-#' @param x a vector of p-values
+#' @param ps a vector of p-values
 #' @return p.val an integrated p-value
 #' @examples
 #' ps<-c(0.01,0.05,0.03,0.2)
@@ -347,8 +347,9 @@ textplot2<-function(x,y,words,cex=1,pch = 16,pointcolor="#FFFFFF00",
 #' @param max.dist numeric. Maximum fragment length accepted. Default=550
 #' @return nothing
 #' @examples
+#' library(vulcandata)
 #' sheetfile<-"deleteme.csv"
-#' vulcansheet(sheetfile)
+#' vulcandata::vulcansheet(sheetfile)
 #' a<-read.csv(sheetfile,as.is=TRUE)
 #' bams<-a$bamReads
 #' unlink(sheetfile)

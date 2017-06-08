@@ -52,7 +52,6 @@ library(vulcandata)
 
 %-------
 \section{Running an example VULCAN pipeline}
-
 \subsection{Generate a example annotation file}
 <<echo=TRUE, results=hide>>=
 # Generate an annotation file from the dummy ChIP-Seq dataset

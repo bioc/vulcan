@@ -29,7 +29,7 @@ This function coalesces and annotates a set of BAM files into peak-centered
 data
 }
 \examples{
-require(vulcandata)
+library(vulcandata)
 vfile<-"deleteme.csv"
 vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
