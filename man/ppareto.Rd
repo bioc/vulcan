@@ -10,6 +10,13 @@ ppareto(x, threshold = 1, exponent, lower.tail = TRUE)
 }
 \arguments{
 \item{x}{Data vector, lower threshold, scaling exponent, usual flags}
+
+\item{threshold}{numeric value to define the start of the tail}
+
+\item{exponent}{the exponent obtained from the pareto.fit function}
+
+\item{lower.tail}{logical. If the lower tail of the distribution should be
+considered. Default is TRUE}
 }
 \value{
 Vector of (log) probabilities

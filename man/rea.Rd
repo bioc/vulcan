@@ -20,6 +20,9 @@ object and each group. If NULL (default) all associations are treated equally}
 
 \item{minsize}{integer. Minimum size of the groups to be analyzed. Default=1}
 }
+\value{
+A numeric vector of normalized enrichment scores
+}
 \description{
 REA Calculates enrichment of groups of objects over a vector of values
 associated to a population of objects

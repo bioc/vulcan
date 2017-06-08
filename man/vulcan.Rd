@@ -17,6 +17,9 @@ to be compared (1 vs 2)}
 \item{annotation}{an optional named vector to convert gene identifiers
 (e.g. entrez ids to gene symbols)
 Default (NULL) won't convert gene names.}
+
+\item{minsize}{integer indicating the minimum regulon size for the analysis
+to be run. Default: 10}
 }
 \value{
 a list
@@ -29,7 +32,7 @@ ChIP-Seq derived signature
 require(vulcandata)
 # Generate an annotation file from the dummy ChIP-Seq dataset
 vfile<-"deleteme.csv"
-vulcansheet(vfile)
+vulcandata::vulcansheet(vfile)
 # Import BAM and BED information into a list object
 vobj<-vulcan.import(vfile)
 unlink(vfile)

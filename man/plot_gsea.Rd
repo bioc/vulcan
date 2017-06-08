@@ -23,6 +23,8 @@ enrichment scores}
 
 \item{correctEntrez}{Logical. Should the ids converted to gene symbols?}
 
+\item{bottomYtitle}{String for the title of the bottom part of the plot}
+
 \item{bottomYlabel}{String for the label}
 
 \item{ext_nes}{Provide a NES from an external calculation}

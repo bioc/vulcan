@@ -12,6 +12,8 @@
 #' object and each group. If NULL (default) all associations are treated equally
 #' @param minsize integer. Minimum size of the groups to be analyzed. Default=1
 #'
+#' @return A numeric vector of normalized enrichment scores
+#'
 #' @examples
 #' signatures<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
 #' set1<-paste0("gene",sample(1:200,50))

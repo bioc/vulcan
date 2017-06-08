@@ -14,7 +14,10 @@ gsea(reflist, set, method = c("permutation", "pareto"), np = 1000, w = 1,
 
 \item{method}{one of "permutation" or "pareto"}
 
-\item{w}{weight}
+\item{np}{Number of permutations (Default: 1000)}
+
+\item{w}{exponent used to raise the supplied scores. Default is 1 (original
+scores unchanged)}
 
 \item{gsea_null}{a GSEA null distribution (Optional)}
 }

@@ -13,7 +13,7 @@
 #' @examples
 #' require(vulcandata)
 #' vfile<-"deleteme.csv"
-#' vulcansheet(vfile)
+#' vulcandata::vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
 #'
@@ -98,13 +98,13 @@ vulcan.import<-function(sheetfile,intervals=NULL){
 #' One of "closest","strongest","sum"(default),"topvar","farthest","lowvar"
 #' @param lborder Boundary for peak annotation (in nucleotides) upstream of
 #' the Transcription starting site (default: -10000)
-#' @param lborder Boundary for peak annotation (in nucleotides) downstream of
+#' @param rborder Boundary for peak annotation (in nucleotides) downstream of
 #' the Transcription starting site (default: 10000)
 #' @return a list
 #' @examples
 #' require(vulcandata)
 #' vfile<-"deleteme.csv"
-#' vulcansheet(vfile)
+#' vulcandata::vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
@@ -391,7 +391,7 @@ vulcan.annotate<-function(vobj,lborder=-10000,rborder=10000,
 #' @examples
 #' require(vulcandata)
 #' vfile<-"deleteme.csv"
-#' vulcansheet(vfile)
+#' vulcandata::vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
@@ -432,6 +432,8 @@ vulcan.normalize<-function(vobj){
 #' @param annotation an optional named vector to convert gene identifiers
 #' (e.g. entrez ids to gene symbols)
 #' Default (NULL) won't convert gene names.
+#' @param minsize integer indicating the minimum regulon size for the analysis
+#' to be run. Default: 10
 #'
 #' @return a list
 #'
@@ -439,7 +441,7 @@ vulcan.normalize<-function(vobj){
 #' require(vulcandata)
 #' # Generate an annotation file from the dummy ChIP-Seq dataset
 #' vfile<-"deleteme.csv"
-#' vulcansheet(vfile)
+#' vulcandata::vulcansheet(vfile)
 #' # Import BAM and BED information into a list object
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)

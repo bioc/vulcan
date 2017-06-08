@@ -14,12 +14,12 @@ the funcion vulcan.import)}
 \item{lborder}{Boundary for peak annotation (in nucleotides) upstream of
 the Transcription starting site (default: -10000)}
 
+\item{rborder}{Boundary for peak annotation (in nucleotides) downstream of
+the Transcription starting site (default: 10000)}
+
 \item{method}{Method to deal with multiple peaks found within gene promoter
 boundaries.
 One of "closest","strongest","sum"(default),"topvar","farthest","lowvar"}
-
-\item{lborder}{Boundary for peak annotation (in nucleotides) downstream of
-the Transcription starting site (default: 10000)}
 }
 \value{
 a list
@@ -31,7 +31,7 @@ data
 \examples{
 require(vulcandata)
 vfile<-"deleteme.csv"
-vulcansheet(vfile)
+vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
 unlink(vfile)
 vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")

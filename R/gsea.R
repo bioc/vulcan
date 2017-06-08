@@ -5,7 +5,9 @@
 #' @param reflist named vector of reference scores
 #' @param set element set
 #' @param method one of "permutation" or "pareto"
-#' @param w weight
+#' @param w exponent used to raise the supplied scores. Default is 1 (original
+#' scores unchanged)
+#' @param np Number of permutations (Default: 1000)
 #' @param gsea_null a GSEA null distribution (Optional)
 #' @return A GSEA object. Basically a list of s components:
 #' \describe{
@@ -167,6 +169,8 @@ gsea <- function(reflist,
 #' @param set A vector containing gene names.
 #' @param reflist A named vector containing the weights of the entire signature
 #' @param np Number of permutations (Default: 1000)
+#' @param w exponent used to raise the supplied scores. Default is 1 (original
+#' scores unchanged)
 #' @return A vector of null scores appropriate for the set/reflist combination
 #' provided
 #' @examples
@@ -219,6 +223,7 @@ null_gsea<-function(set,reflist,w=1,np=1000){
 #' @param title String to be plotted above the Running Enrichment Score
 #' @param correctEntrez Logical. Should the ids converted to gene symbols?
 #' @param bottomYlabel String for the label
+#' @param bottomYtitle String for the title of the bottom part of the plot
 #' @param ext_nes Provide a NES from an external calculation
 #' @param omit_middle If TRUE, will not plot the running score
 #' (FALSE by default)
@@ -477,6 +482,10 @@ dpareto <- function(x, threshold = 1, exponent, log=FALSE) {
 #' '
 #' Gives NA on values < threshold
 #' @param x Data vector, lower threshold, scaling exponent, usual flags
+#' @param threshold numeric value to define the start of the tail
+#' @param exponent the exponent obtained from the pareto.fit function
+#' @param lower.tail logical. If the lower tail of the distribution should be
+#' considered. Default is TRUE
 #' @return Vector of (log) probabilities
 #' @examples
 #' # Estimate the tail of a pospulation normally distributed
@@ -509,6 +518,7 @@ ppareto <- function(x, threshold=1, exponent, lower.tail=TRUE) {
 #' A wrapper for functions implementing actual methods
 #' @param data data vector, lower threshold (or "find", indicating it should be
 #' found from the data), method (likelihood or regression, defaulting to former)
+#' @param threshold numeric value to define the start of the tail
 #' @return List indicating type of distribution ("pareto"), parameters,
 #' information about fit (depending on method), OR a warning and NA if method
 #' is not recognized

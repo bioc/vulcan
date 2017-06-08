@@ -57,7 +57,7 @@ library(vulcandata)
 <<echo=TRUE, results=hide>>=
 # Generate an annotation file from the dummy ChIP-Seq dataset
 vfile<-"deleteme.csv"
-vulcansheet(vfile)
+vulcandata::vulcansheet(vfile)
 @
 
 \subsection{Import ChIP-Seq information}

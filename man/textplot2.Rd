@@ -16,6 +16,8 @@ textplot2(x, y, words, cex = 1, pch = 16, pointcolor = "#FFFFFF00",
 
 \item{cex}{font size}
 
+\item{pch}{pch parameter for the plotted points}
+
 \item{pointcolor}{a string specifying the color of the points
 (default #FFFFFF00)}
 

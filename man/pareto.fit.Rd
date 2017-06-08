@@ -9,6 +9,8 @@ pareto.fit(data, threshold)
 \arguments{
 \item{data}{data vector, lower threshold (or "find", indicating it should be
 found from the data), method (likelihood or regression, defaulting to former)}
+
+\item{threshold}{numeric value to define the start of the tail}
 }
 \value{
 List indicating type of distribution ("pareto"), parameters,

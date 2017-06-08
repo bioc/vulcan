@@ -11,6 +11,9 @@ null_gsea(set, reflist, w = 1, np = 1000)
 
 \item{reflist}{A named vector containing the weights of the entire signature}
 
+\item{w}{exponent used to raise the supplied scores. Default is 1 (original
+scores unchanged)}
+
 \item{np}{Number of permutations (Default: 1000)}
 }
 \value{
