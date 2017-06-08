@@ -84,7 +84,7 @@ names(vobj$samples)
 \subsection{Load an ARACNe network}
 We will use a regulon object as specified in the \emph{viper} package, named "network"
 <<echo=TRUE, results=hide>>=
-load(system.file("extdata","network.rda",package="vulcan",mustWork=TRUE))
+load(system.file("extdata","network.rda",package="vulcandata",mustWork=TRUE))
 @
 
 \subsection{Run VULCAN}

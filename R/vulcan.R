@@ -452,7 +452,7 @@ vulcan.normalize<-function(vobj){
 #'
 #' # Load an ARACNe network
 #' # This is a regulon object as specified in the VIPER package, named "network"
-#' load(system.file("extdata","network.rda",package="vulcan",mustWork=TRUE))
+#' load(system.file("extdata","network.rda",package="vulcandata",mustWork=TRUE))
 #' # Run VULCAN
 #' # We can reduce the minimum regulon size, since in this example only one
 #' # chromosome
