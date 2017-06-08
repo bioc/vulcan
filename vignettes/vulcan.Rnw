@@ -1,3 +1,7 @@
+%\VignetteIndexEntry{Vulcan: VirtUaL ChIP-Seq Analysis through Networks}
+%\VignettePackage{vulcan}
+%\VignetteEngine{utils::Sweave}
+
 \documentclass{article}
 \usepackage{fullpage}
 \usepackage{hyperref}
