@@ -5,6 +5,11 @@ git commit -m "First Commit"
 git remote add origin https://github.com/federicogiorgi/vulcan.git
 git push -u origin master
 
+
+git config credential.helper store
+git config --global credential.helper 'cache --timeout 7200'
+
+
 cd /Users/giorgi01/Dropbox/rstudio/vulcanpackage/vulcan
 git add --all
 git commit -m "Update"
