@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+deleteme.csv
+sheetfile.csv
+vignettes/.Rhistory
+R/.Rhistory
