@@ -22,7 +22,7 @@ data
 }
 \examples{
 library(vulcandata)
-vfile<-"deleteme.csv"
+vfile<-'deleteme.csv'
 vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
 unlink(vfile)

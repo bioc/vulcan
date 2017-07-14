@@ -32,15 +32,15 @@ for those words not covering their x,y coordinates}
 nothing
 }
 \description{
-This function is an extension of the \code{"textplot"} function from the
-\code{"wordcloud"} package, with the extra functionality of specifiying the
+This function is an extension of the \code{'textplot'} function from the
+\code{'wordcloud'} package, with the extra functionality of specifiying the
 color of the points
 }
 \examples{
-obj_names<-apply(expand.grid(LETTERS,LETTERS),1,paste,collapse="")
+obj_names<-apply(expand.grid(LETTERS,LETTERS),1,paste,collapse='')
 a<-setNames(runif(26*26),obj_names)
 b<-setNames(rnorm(26*26),obj_names)
-plot(a,b,pch=20,col="grey")
+plot(a,b,pch=20,col='grey')
 top<-names(sort(-a))[1:50]
-textplot2(a[top],b[top],words=top,new=FALSE,pointcolor="black")
+textplot2(a[top],b[top],words=top,new=FALSE,pointcolor='black')
 }

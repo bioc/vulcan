@@ -4,6 +4,21 @@
 library(devtools)
 document()
 
+
+# Remove .Rhistory
+unlink(".Rhistory")
+unlink("R/.Rhistory")
+
+
+# Force the formatR style
+library(formatR)
+getOption("width",80)
+for(rfile in dir("R",full.names=TRUE)){
+    tidy_source(source=rfile,file=rfile,width.cutoff=80)
+}
+
+
+
 cat("\nimport(zoo)\n",file="NAMESPACE",append=TRUE)
 #cat("import(IRanges)\n",file="NAMESPACE",append=TRUE)
 cat("import(viper)\n",file="NAMESPACE",append=TRUE)

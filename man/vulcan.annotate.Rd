@@ -9,7 +9,7 @@ vulcan.annotate(vobj, lborder = -10000, rborder = 10000,
 }
 \arguments{
 \item{vobj}{A list of peakcounts, samples and peakrpkms (i.e. the output of
-the funcion vulcan.import)}
+the function vulcan.import)}
 
 \item{lborder}{Boundary for peak annotation (in nucleotides) upstream of
 the Transcription starting site (default: -10000)}
@@ -18,21 +18,39 @@ the Transcription starting site (default: -10000)}
 the Transcription starting site (default: 10000)}
 
 \item{method}{Method to deal with multiple peaks found within gene promoter
-boundaries.
-One of "closest","strongest","sum"(default),"topvar","farthest","lowvar"}
+boundaries. One of sum (default), closest, strongest, topvar, farthest or
+lowvar. This will affect only genes with multiple possible peaks. When a
+single peak can be mapped to the promoter region of the gene, that peak
+abundance will be considered as the gene promoter's occupancy.
+\describe{
+\item{sum}{when multiple peaks are found, sum their contributions}
+\item{closest}{when multiple peaks are found, keep only the closest to the
+TSS as the representative one}
+\item{strongest}{when multiple peaks are found, keep the strongest as the
+representative one}
+\item{farthest}{when multiple peaks are found, keep only the closest to the
+TSS as the representative one}
+\item{topvar}{when multiple peaks are found, keep the most varying as the
+representative one}
+\item{lowvar}{when multiple peaks are found, keep the least varying as the
+representative one}
+}}
 }
 \value{
-a list
+a list of raw read counts and rpkms mapping to the promoter region of
+genes
 }
 \description{
 This function coalesces and annotates a set of BAM files into peak-centered
-data
+data. It implements the ChIPPeakANno methods, with specific choices dealing
+with defining the genomic area around the promoter and which peaks to
+include.
 }
 \examples{
 library(vulcandata)
-vfile<-"deleteme.csv"
+vfile<-'deleteme.csv'
 vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
 unlink(vfile)
-vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
+vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 }

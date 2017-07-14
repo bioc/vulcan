@@ -28,9 +28,9 @@ REA Calculates enrichment of groups of objects over a vector of values
 associated to a population of objects
 }
 \examples{
-signatures<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
-set1<-paste0("gene",sample(1:200,50))
-set2<-paste0("gene",sample(1:1000,50))
+signatures<-setNames(-sort(rnorm(1000)),paste0('gene',1:1000))
+set1<-paste0('gene',sample(1:200,50))
+set2<-paste0('gene',sample(1:1000,50))
 groups<-list(set1=set1,set2=set2)
 obj<-rea(signatures=signatures,groups=groups)
 obj

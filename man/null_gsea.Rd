@@ -25,7 +25,7 @@ This function generates a GSEA null distribution from
 }
 \examples{
 reflist<-setNames(-sort(rnorm(26)),LETTERS)
-set<-c("A","B","D","F")
+set<-c('A','B','D','F')
 nulldist<-null_gsea(set,reflist)
 nulldist[1:10]
 }

@@ -23,6 +23,6 @@ p-value, using a T distribution with the provided number of samples N minus
 set.seed(1)
 a<-rnorm(1000)
 b<-a+rnorm(1000,sd=10)
-r<-cor(a,b,method="pearson")
+r<-cor(a,b,method='pearson')
 corr2p(r,N=length(a))
 }

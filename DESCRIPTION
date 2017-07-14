@@ -1,12 +1,18 @@
 Package: vulcan
 Type: Package
 Title: VirtUaL ChIP-Seq data Analysis using Networks
-Version: 0.99.9
+Version: 0.99.10
 Author: Federico M. Giorgi, Andrew N. Holding, Florian Markowetz
 Maintainer: Federico M. Giorgi <federico.giorgi@gmail.com>
-Description: This package interrogates regulatory networks to infer cofactors
+Description: Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a package
+    that interrogates gene regulatory networks to infer cofactors
     significantly enriched in a differential binding signature coming from
-    ChIP-Seq data
+    ChIP-Seq data.
+    In order to do so, our package combines strategies from different
+    BioConductor packages: DESeq for data normalization, ChIPpeakAnno and
+    DiffBind for annotation and definition of ChIP-Seq genomic peaks,
+    csaw to define optimal peak width and viper for applying a regulatory
+    network over a differential binding signature.
 License: LGPL-3
 LazyData: TRUE
 biocViews: SystemsBiology, NetworkEnrichment, GeneExpression, ChIPSeq

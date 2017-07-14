@@ -7,13 +7,13 @@
 pareto.fit(data, threshold)
 }
 \arguments{
-\item{data}{data vector, lower threshold (or "find", indicating it should be
+\item{data}{data vector, lower threshold (or 'find', indicating it should be
 found from the data), method (likelihood or regression, defaulting to former)}
 
 \item{threshold}{numeric value to define the start of the tail}
 }
 \value{
-List indicating type of distribution ("pareto"), parameters,
+List indicating type of distribution ('pareto'), parameters,
 information about fit (depending on method), OR a warning and NA if method
 is not recognized
 }
@@ -31,7 +31,7 @@ fit<-pareto.fit(abs(x),threshold=q95)
 value<-5
 pvalue<-ppareto(value, threshold=q95, exponent=fit$exponent,
 lower.tail=FALSE)/20
-plot(density(abs(x)),xlim=c(0,value+0.3),main="Pareto fit")
+plot(density(abs(x)),xlim=c(0,value+0.3),main='Pareto fit')
 arrows(value,0.2,value,0)
-text(value,0.2,labels=paste0("p=",signif(pvalue,2)))
+text(value,0.2,labels=paste0('p=',signif(pvalue,2)))
 }

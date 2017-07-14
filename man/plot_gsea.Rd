@@ -40,7 +40,7 @@ This function generates a GSEA plot from a gsea object
 }
 \examples{
 reflist<-setNames(-sort(rnorm(26)),LETTERS)
-set<-c("A","B","D","F")
-obj<-gsea(reflist,set,method="pareto")
+set<-c('A','B','D','F')
+obj<-gsea(reflist,set,method='pareto')
 plot_gsea(obj)
 }

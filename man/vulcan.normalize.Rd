@@ -7,7 +7,7 @@
 vulcan.normalize(vobj)
 }
 \arguments{
-\item{vobj}{a list, the output of the \code{"vulcan.annotate"} function}
+\item{vobj}{a list, the output of the \code{'vulcan.annotate'} function}
 }
 \value{
 a list
@@ -17,10 +17,10 @@ This function normalizes gene-centered ChIP-Seq data using VST
 }
 \examples{
 library(vulcandata)
-vfile<-"deleteme.csv"
+vfile<-'deleteme.csv'
 vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
 unlink(vfile)
-vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method="sum")
+vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 vobj<-vulcan.normalize(vobj)
 }

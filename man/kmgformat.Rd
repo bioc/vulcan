@@ -22,14 +22,14 @@ to G, trillions to T, quadrillions to P
 # Thousands
 set.seed(1)
 a<-runif(1000,0,1e4)
-plot(a,yaxt="n")
+plot(a,yaxt='n')
 kmg<-kmgformat(pretty(a))
 axis(2,at=pretty(a),labels=kmg)
 
 # Millions to Billions
 set.seed(1)
 a<-runif(1000,0,1e9)
-plot(a,yaxt="n",pch=20,col=val2col(a))
+plot(a,yaxt='n',pch=20,col=val2col(a))
 kmg<-kmgformat(pretty(a))
 axis(2,at=pretty(a),labels=kmg)
 }

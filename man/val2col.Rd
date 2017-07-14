@@ -10,11 +10,11 @@ val2col(z, col1 = "navy", col2 = "white", col3 = "red3", nbreaks = 100,
 \arguments{
 \item{z}{a vector of numbers}
 
-\item{col1}{a color name for the min value, default "navy"}
+\item{col1}{a color name for the min value, default 'navy'}
 
-\item{col2}{a color name for the middle value, default "white"}
+\item{col2}{a color name for the middle value, default 'white'}
 
-\item{col3}{a color name for the max value, default "red3"}
+\item{col3}{a color name for the max value, default 'red3'}
 
 \item{nbreaks}{Number of colors to be generated. Default is 30.}
 

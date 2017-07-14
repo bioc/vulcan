@@ -12,7 +12,7 @@ gsea(reflist, set, method = c("permutation", "pareto"), np = 1000, w = 1,
 
 \item{set}{element set}
 
-\item{method}{one of "permutation" or "pareto"}
+\item{method}{one of 'permutation' or 'pareto'}
 
 \item{np}{Number of permutations (Default: 1000)}
 
@@ -34,8 +34,8 @@ A GSEA object. Basically a list of s components:
 This function performs Gene Set Enrichment Analysis
 }
 \examples{
-reflist<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
-set<-paste0("gene",sample(1:200,50))
-obj<-gsea(reflist,set,method="pareto")
+reflist<-setNames(-sort(rnorm(1000)),paste0('gene',1:1000))
+set<-paste0('gene',sample(1:200,50))
+obj<-gsea(reflist,set,method='pareto')
 obj$p.value
 }

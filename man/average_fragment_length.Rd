@@ -21,7 +21,7 @@ A function to get average fragment length from a ChIP-Seq experiment
 }
 \examples{
 library(vulcandata)
-sheetfile<-"deleteme.csv"
+sheetfile<-'deleteme.csv'
 vulcandata::vulcansheet(sheetfile)
 a<-read.csv(sheetfile,as.is=TRUE)
 bams<-a$bamReads
