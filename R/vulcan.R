@@ -21,78 +21,78 @@
 vulcan.import <- function(sheetfile, intervals = NULL) {
     # Check the dataset
     sheet <- read.csv(sheetfile, as.is = TRUE)
-    
+
     # Generate a DiffBind object
     dbobj <- dba(sampleSheet = sheetfile)
-    message("Sheet loaded. You have ", nrow(sheet), 
-        " samples and ", length(unique(sheet$Condition)), 
+    message("Sheet loaded. You have ", nrow(sheet),
+        " samples and ", length(unique(sheet$Condition)),
         " conditions")
-    
+
     # Select the interval size automatically
     # (if not provided by the user)
     if (is.null(intervals)) {
         # List of bam files
         bam.files <- sheet[, "bamReads"]
-        intervals <- average_fragment_length(bam.files, 
+        intervals <- average_fragment_length(bam.files,
             plot = FALSE) * 2
-        message("Peak size automatically detected as ", 
+        message("Peak size automatically detected as ",
             intervals, "nt")
     }
-    
+
     # Count reads in binding sites intervals
     dbcounts <- dba.count(dbobj, summits = intervals)
-    
+
     # Extract counts from the dbacount object
     listcounts <- dbcounts$peaks
-    names(listcounts) <- dbcounts$samples[, 
+    names(listcounts) <- dbcounts$samples[,
         1]
-    
+
     # Prepare RPKM matrix
     first <- listcounts[[1]]
-    rawmat <- matrix(NA, nrow = nrow(first), 
+    rawmat <- matrix(NA, nrow = nrow(first),
         ncol = length(listcounts) + 3)
-    colnames(rawmat) <- c("Chr", "Start", 
+    colnames(rawmat) <- c("Chr", "Start",
         "End", names(listcounts))
     rownames(rawmat) <- 1:nrow(rawmat)
     rawmat <- as.data.frame(rawmat)
     rawmat[, 1] <- as.character(first[, 1])
     rawmat[, 2] <- as.integer(first[, 2])
     rawmat[, 3] <- as.integer(first[, 3])
-    for (i in seq_len(listcounts)) {
+    for (i in seq_len(length(listcounts))) {
         rawmat[, names(listcounts)[i]] <- as.numeric(listcounts[[i]]$RPKM)
     }
     peakrpkms <- rawmat
     rm(rawmat)
-    
+
     # Prepare Count matrix
     first <- listcounts[[1]]
-    rawmat <- matrix(NA, nrow = nrow(first), 
+    rawmat <- matrix(NA, nrow = nrow(first),
         ncol = length(listcounts) + 3)
-    colnames(rawmat) <- c("Chr", "Start", 
+    colnames(rawmat) <- c("Chr", "Start",
         "End", names(listcounts))
     rownames(rawmat) <- 1:nrow(rawmat)
     rawmat <- as.data.frame(rawmat)
     rawmat[, 1] <- as.character(first[, 1])
     rawmat[, 2] <- as.integer(first[, 2])
     rawmat[, 3] <- as.integer(first[, 3])
-    for (i in seq_len(listcounts)) {
+    for (i in seq_len(length(listcounts))) {
         rawmat[, names(listcounts)[i]] <- as.integer(listcounts[[i]]$Reads)
     }
     peakcounts <- rawmat
     rm(rawmat)
-    
-    
+
+
     # Create an annotation structure
     samples <- list()
     conditions <- unique(sheet$Condition)
     for (cond in conditions) {
-        heresamples <- sheet$SampleID[sheet$Condition == 
+        heresamples <- sheet$SampleID[sheet$Condition ==
             cond]
         samples[[cond]] <- heresamples
     }
-    
+
     # Return output
-    vobj <- list(peakcounts = peakcounts, 
+    vobj <- list(peakcounts = peakcounts,
         samples = samples, peakrpkms = peakrpkms)
     return(vobj)
 }
@@ -138,268 +138,290 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' unlink(vfile)
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 #' @export
-vulcan.annotate <- function(vobj, lborder = -10000, 
-    rborder = 10000, method = c("closest", 
-        "strongest", "sum", "topvar", "farthest", 
+vulcan.annotate <- function(vobj, lborder = -10000,
+    rborder = 10000, method = c("closest",
+        "strongest", "sum", "topvar", "farthest",
         "lowvar")) {
     # Annotate (hg19)
-    annotation <- toGRanges(TxDb.Hsapiens.UCSC.hg19.knownGene, 
+    annotation <- toGRanges(TxDb.Hsapiens.UCSC.hg19.knownGene,
         feature = "gene")
-    
+
     ##### PROCESS RAW COUNTS
     gr <- GRanges(vobj$peakcounts)
-    anno <- annotatePeakInBatch(gr, AnnotationData = annotation, 
-        output = "overlapping", FeatureLocForDistance = "TSS", 
+    anno <- annotatePeakInBatch(gr, AnnotationData = annotation,
+        output = "overlapping", FeatureLocForDistance = "TSS",
         bindingRegion = c(lborder, rborder))
-    
+
     # Convert to a more handy data frame
     dfanno <- anno
-    names(dfanno) <- seq_len(dfanno)
+    names(dfanno) <- seq_len(ncol(dfanno))
     dfanno <- as.data.frame(dfanno)
-    
+
     # Prepare the output table
     allsamples <- unique(unlist(vobj$samples))
     genes <- unique(dfanno$feature)
     peakspergene <- table(dfanno$feature)
-    rawcounts <- matrix(NA, nrow = length(genes), 
+    rawcounts <- matrix(NA, nrow = length(genes),
         ncol = length(allsamples))
     colnames(rawcounts) <- allsamples
     rownames(rawcounts) <- genes
-    
+
     # All methods: if a gene has a single
     # peak, you select that
-    genesone <- names(peakspergene)[peakspergene == 
+    genesone <- names(peakspergene)[peakspergene ==
         1]
     for (gene in genesone) {
-        rawcounts[gene, allsamples] <- as.numeric(dfanno[dfanno$feature == 
+        rawcounts[gene, allsamples] <- as.numeric(dfanno[dfanno$feature ==
             gene, allsamples])
     }
-    
+
     # Other methods: they deal with cases
     # where multiple peaks are found
-    genesmore <- names(peakspergene)[peakspergene > 
+    genesmore <- names(peakspergene)[peakspergene >
         1]
-    
+
     # Method closest: when multiple peaks are
     # found, keep only the closest to the TSS
     # as the representative one
     if (method == "closest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
             closest <- which.min(subanno$distanceToStart)
-            rawcounts[gene, allsamples] <- as.numeric(subanno[closest, 
+            rawcounts[gene, allsamples] <- as.numeric(subanno[closest,
                 allsamples])
         }
     }
-    
+
     # Method farthest: when multiple peaks
     # are found, keep only the closest to the
     # TSS as the representative one
     if (method == "farthest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
             farthest <- which.max(subanno$distanceToStart)
-            rawcounts[gene, allsamples] <- as.numeric(subanno[farthest, 
+            rawcounts[gene, allsamples] <- as.numeric(subanno[farthest,
                 allsamples])
         }
     }
-    
-    
+
+
     # Method sum: when multiple peaks are
     # found, sum their contributions
     if (method == "sum") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            sums <- apply(subanno[, allsamples], 
+            sums <- apply(subanno[, allsamples],
                 2, sum)
             rawcounts[gene, allsamples] <- as.numeric(sums)
         }
     }
-    
+
     # Method strongest: when multiple peaks
     # are found, keep the strongest as the
     # representative one
     if (method == "strongest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            sums <- apply(subanno[, allsamples], 
+            sums <- apply(subanno[, allsamples],
                 1, sum)
             top <- which.max(sums)
-            rawcounts[gene, allsamples] <- as.numeric(subanno[top, 
+            rawcounts[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     # Method topvar: when multiple peaks are
     # found, keep the most varying as the
     # representative one
     if (method == "topvar") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            vars <- apply(subanno[, allsamples], 
+            vars <- apply(subanno[, allsamples],
                 1, var)
             top <- which.max(vars)
-            rawcounts[gene, allsamples] <- as.numeric(subanno[top, 
+            rawcounts[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     # Method lowvar: when multiple peaks are
     # found, keep the least varying as the
     # representative one
     if (method == "lowvar") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            vars <- apply(subanno[, allsamples], 
+            vars <- apply(subanno[, allsamples],
                 1, var)
             top <- which.min(vars)
-            rawcounts[gene, allsamples] <- as.numeric(subanno[top, 
+            rawcounts[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     ##### PROCESS RPKMS
     gr <- GRanges(vobj$peakrpkms)
-    anno <- annotatePeakInBatch(gr, AnnotationData = annotation, 
-        output = "overlapping", FeatureLocForDistance = "TSS", 
+    anno <- annotatePeakInBatch(gr, AnnotationData = annotation,
+        output = "overlapping", FeatureLocForDistance = "TSS",
         bindingRegion = c(lborder, rborder))
-    
+
     # Convert to a more handy data frame
     dfanno <- anno
-    names(dfanno) <- seq_len(dfanno)
+    names(dfanno) <- seq_len(ncol(dfanno))
     dfanno <- as.data.frame(dfanno)
-    
+
     # Prepare the output table
     allsamples <- unique(unlist(vobj$samples))
     genes <- unique(dfanno$feature)
     peakspergene <- table(dfanno$feature)
-    rpkms <- matrix(NA, nrow = length(genes), 
+    rpkms <- matrix(NA, nrow = length(genes),
         ncol = length(allsamples))
     colnames(rpkms) <- allsamples
     rownames(rpkms) <- genes
-    
+
     # All methods: if a gene has a single
     # peak, you select that
-    genesone <- names(peakspergene)[peakspergene == 
+    genesone <- names(peakspergene)[peakspergene ==
         1]
     for (gene in genesone) {
-        rpkms[gene, allsamples] <- as.numeric(dfanno[dfanno$feature == 
+        rpkms[gene, allsamples] <- as.numeric(dfanno[dfanno$feature ==
             gene, allsamples])
     }
-    
+
     # Other methods: they deal with cases
     # where multiple peaks are found
-    genesmore <- names(peakspergene)[peakspergene > 
+    genesmore <- names(peakspergene)[peakspergene >
         1]
-    
+
     # Method closest: when multiple peaks are
     # found, keep only the closest to the TSS
     # as the representative one
     if (method == "closest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
             closest <- which.min(subanno$distanceToStart)
-            rpkms[gene, allsamples] <- as.numeric(subanno[closest, 
+            rpkms[gene, allsamples] <- as.numeric(subanno[closest,
                 allsamples])
         }
     }
-    
+
     # Method farthest: when multiple peaks
     # are found, keep only the closest to the
     # TSS as the representative one
     if (method == "farthest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
             farthest <- which.max(subanno$distanceToStart)
-            rpkms[gene, allsamples] <- as.numeric(subanno[farthest, 
+            rpkms[gene, allsamples] <- as.numeric(subanno[farthest,
                 allsamples])
         }
     }
-    
-    
+
+
     # Method sum: when multiple peaks are
     # found, sum their contributions
     if (method == "sum") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            sums <- apply(subanno[, allsamples], 
+            sums <- apply(subanno[, allsamples],
                 2, sum)
             rpkms[gene, allsamples] <- as.numeric(sums)
         }
     }
-    
+
     # Method strongest: when multiple peaks
     # are found, keep the strongest as the
     # representative one
     if (method == "strongest") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            sums <- apply(subanno[, allsamples], 
+            sums <- apply(subanno[, allsamples],
                 1, sum)
             top <- which.max(sums)
-            rpkms[gene, allsamples] <- as.numeric(subanno[top, 
+            rpkms[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     # Method topvar: when multiple peaks are
     # found, keep the most varying as the
     # representative one
     if (method == "topvar") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            vars <- apply(subanno[, allsamples], 
+            vars <- apply(subanno[, allsamples],
                 1, var)
             top <- which.max(vars)
-            rpkms[gene, allsamples] <- as.numeric(subanno[top, 
+            rpkms[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     # Method lowvar: when multiple peaks are
     # found, keep the least varying as the
     # representative one
     if (method == "lowvar") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == 
+            subanno <- dfanno[dfanno$feature ==
                 gene, ]
-            vars <- apply(subanno[, allsamples], 
+            vars <- apply(subanno[, allsamples],
                 1, var)
             top <- which.min(vars)
-            rpkms[gene, allsamples] <- as.numeric(subanno[top, 
+            rpkms[gene, allsamples] <- as.numeric(subanno[top,
                 allsamples])
         }
     }
-    
+
     ### Fix data types as needed
     for (j in seq_len(ncol(rawcounts))) {
-        rawcounts[, j] <- as.numeric(rawcounts[, 
+        rawcounts[, j] <- as.numeric(rawcounts[,
             j])
     }
     rawcounts <- as.matrix(rawcounts)
-    
+
     for (j in seq_len(ncol(rpkms))) {
-        rpkms[, j] <- as.numeric(rpkms[, 
+        rpkms[, j] <- as.numeric(rpkms[,
             j])
     }
     rpkms <- as.matrix(rpkms)
-    
+
     # Return object
     vobj$rawcounts <- rawcounts
     vobj$rpkms <- rpkms
     return(vobj)
 }
+
+
+dist_calc<-function(method,dfanno,genematrix,genesmore){
+    my_func <- switch (method,
+                       farthest = which.max,
+                       closest = which.min,
+                       ## more types of methods
+                       ## custom_function = function(x) ...
+                       ## default:
+                       stop("unsupported method ", method)
+    )
+    for (gene in genesmore) {
+        subanno <- dfanno[dfanno$feature == gene, ]
+        result <- my_func(subanno$distanceToStart)
+        rawcounts[gene, allsamples] <- as.numeric(subanno[result, allsamples])
+}
+
+
+
+}
+
+
 
 #' Function to normalize promoter peak data
 #'
@@ -424,15 +446,15 @@ vulcan.normalize <- function(vobj) {
     rawcounts <- vobj$rawcounts
     allsamples <- unique(unlist(samples))
     allgenes <- rownames(rawcounts)
-    
+
     # Generate a normalized abundance object
     conditions <- c()
-    for (i in seq_len(samples)) {
-        conditions <- c(conditions, rep(names(samples)[i], 
+    for (i in seq_len(length(samples))) {
+        conditions <- c(conditions, rep(names(samples)[i],
             length(samples[[i]])))
     }
     conditions <- factor(conditions)
-    cds <- newCountDataSet(vobj$rawcounts, 
+    cds <- newCountDataSet(vobj$rawcounts,
         conditions)
     cds <- estimateSizeFactors(cds)
     cds <- estimateDispersions(cds, fitType = "local")
@@ -487,12 +509,12 @@ vulcan.normalize <- function(vobj) {
 #' plot(vobj_analysis$msviper,mrs=7)
 #'
 #' @export
-vulcan <- function(vobj, network, contrast, 
+vulcan <- function(vobj, network, contrast,
     annotation = NULL, minsize = 10) {
     tfs <- names(network)
     samples <- vobj$samples
     normalized <- vobj$normalized
-    
+
     # Prepare output objects
     msvipers <- matrix(NA, ncol = 3, nrow = length(tfs))
     rownames(msvipers) <- tfs
@@ -501,15 +523,15 @@ vulcan <- function(vobj, network, contrast,
     b <- samples[[contrast[2]]]
     # Vulcan msviper implementation
     set.seed(1)
-    signature <- rowTtest(normalized[, a], 
+    signature <- rowTtest(normalized[, a],
         normalized[, b])$statistic
-    dnull <- ttestNull(normalized[, a], normalized[, 
+    dnull <- ttestNull(normalized[, a], normalized[,
         b], per = 1000)
-    msviper <- msviper(signature, network, 
+    msviper <- msviper(signature, network,
         dnull, minsize = minsize)
     # Annotate
     if (!is.null(annotation)) {
-        msviper <- msviperAnnot(msviper, 
+        msviper <- msviperAnnot(msviper,
             annotation)
     }
     vobj$msviper <- msviper
@@ -517,7 +539,7 @@ vulcan <- function(vobj, network, contrast,
     mrs <- cbind(msviper$es$nes, z2p(msviper$es$nes))
     colnames(mrs) <- c("NES", "pvalue")
     vobj$mrs <- mrs
-    
+
     return(vobj)
 }
 
@@ -560,58 +582,58 @@ vulcan <- function(vobj, network, contrast,
 #' method='GSEA')
 #' results_rea<-vulcan.pathways(vobj,pathways,contrast=c('all'),method='REA')
 #' @export
-vulcan.pathways <- function(vobj, pathways, 
+vulcan.pathways <- function(vobj, pathways,
     contrast = NULL, method = c("GSEA", "REA")) {
     normalized <- vobj$normalized
     samples <- vobj$samples
     allgenes <- unique(unlist(pathways))
-    
+
     # Specific contrast
     if (!setequal(contrast, "all")) {
         # Define contrast
         a <- samples[[contrast[1]]]
         b <- samples[[contrast[2]]]
-        
+
         # Prepare signature
         set.seed(1)
-        signature <- rowTtest(normalized[, 
+        signature <- rowTtest(normalized[,
             a], normalized[, b])$statistic
         if (is.matrix(signature)) {
             signature <- signature[, 1]
         }
         othergenes <- setdiff(allgenes, names(signature))
-        gaussiannoise <- setNames(rnorm(length(othergenes), 
+        gaussiannoise <- setNames(rnorm(length(othergenes),
             mean = 0, sd = 0.01), othergenes)  # very small
         signature <- c(signature, gaussiannoise)
-        
+
         # GSEA
         if (method == "GSEA") {
-            gsea.pathways <- setNames(rep(0, 
+            gsea.pathways <- setNames(rep(0,
                 length(pathways)), names(pathways))
-            message("Running GSEA for ", 
+            message("Running GSEA for ",
                 length(pathways), " pathways")
-            pb <- txtProgressBar(0, length(pathways), 
+            pb <- txtProgressBar(0, length(pathways),
                 style = 3)
             i <- 0
             for (pname in names(pathways)) {
                 p <- pathways[[pname]]
-                obj <- gsea(reflist = signature, 
-                  set = p, method = "pareto", 
+                obj <- gsea(reflist = signature,
+                  set = p, method = "pareto",
                   np = 100)
                 gsea.pathways[pname] <- obj$nes
-                setTxtProgressBar(pb, i <- i + 
+                setTxtProgressBar(pb, i <- i +
                   1)
             }
             return(gsea.pathways)
         }
-        
+
         # REA
         if (method == "REA") {
-            rea.pathways <- setNames(rep(0, 
+            rea.pathways <- setNames(rep(0,
                 length(pathways)), names(pathways))
-            message("Running REA for ", length(pathways), 
+            message("Running REA for ", length(pathways),
                 " pathways")
-            rea.pathways <- rea(signatures = signature, 
+            rea.pathways <- rea(signatures = signature,
                 groups = pathways, minsize = 1)
             return(rea.pathways)
         }
@@ -620,9 +642,11 @@ vulcan.pathways <- function(vobj, pathways,
             stop("Multiple signatures supported only with method='REA'")
         }
         signatures <- t(scale(t(vobj$normalized)))
-        rea.pathways <- rea(signatures = signatures, 
+        rea.pathways <- rea(signatures = signatures,
             groups = pathways, minsize = 1)
         return(rea.pathways)
     }
 }
+
+
 
