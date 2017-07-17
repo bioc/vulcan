@@ -140,7 +140,10 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' @export
 vulcan.annotate <- function(vobj, lborder = -10000,
                             rborder = 10000, method = c("closest",
-                                                        "strongest", "sum", "topvar", "farthest",
+                                                        "strongest",
+                                                        "sum",
+                                                        "topvar",
+                                                        "farthest",
                                                         "lowvar")) {
     # Annotate (hg19)
     annotation <- toGRanges(TxDb.Hsapiens.UCSC.hg19.knownGene,
@@ -149,7 +152,8 @@ vulcan.annotate <- function(vobj, lborder = -10000,
     ##### PROCESS RAW COUNTS
     gr <- GRanges(vobj$peakcounts)
     anno <- annotatePeakInBatch(gr, AnnotationData = annotation,
-                                output = "overlapping", FeatureLocForDistance = "TSS",
+                                output = "overlapping",
+                                FeatureLocForDistance = "TSS",
                                 bindingRegion = c(lborder, rborder))
 
     # Convert to a more handy data frame
@@ -183,7 +187,8 @@ vulcan.annotate <- function(vobj, lborder = -10000,
     ##### PROCESS RPKMS
     gr <- GRanges(vobj$peakrpkms)
     anno <- annotatePeakInBatch(gr, AnnotationData = annotation,
-                                output = "overlapping", FeatureLocForDistance = "TSS",
+                                output = "overlapping",
+                                FeatureLocForDistance = "TSS",
                                 bindingRegion = c(lborder, rborder))
 
     # Convert to a more handy data frame
@@ -260,7 +265,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                                   gene, ]
             closest <- which.min(subanno$distanceToStart)
             genematrix[gene, allsamples] <- as.numeric(subanno[closest,
-                                                              allsamples])
+                                                               allsamples])
         }
     }
 
@@ -273,7 +278,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                                   gene, ]
             farthest <- which.max(subanno$distanceToStart)
             genematrix[gene, allsamples] <- as.numeric(subanno[farthest,
-                                                              allsamples])
+                                                               allsamples])
         }
     }
 
@@ -301,7 +306,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                           1, sum)
             top <- which.max(sums)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
-                                                              allsamples])
+                                                               allsamples])
         }
     }
 
@@ -316,7 +321,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                           1, var)
             top <- which.max(vars)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
-                                                              allsamples])
+                                                               allsamples])
         }
     }
 
@@ -331,7 +336,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                           1, var)
             top <- which.min(vars)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
-                                                              allsamples])
+                                                               allsamples])
         }
     }
 
@@ -520,7 +525,8 @@ vulcan.pathways <- function(vobj, pathways,
         }
         othergenes <- setdiff(allgenes, names(signature))
         gaussiannoise <- setNames(rnorm(length(othergenes),
-                                        mean = 0, sd = 0.01), othergenes)  # very small
+                                        mean = 0, sd = 0.01),
+                                  othergenes)  # very small
         signature <- c(signature, gaussiannoise)
 
         # GSEA

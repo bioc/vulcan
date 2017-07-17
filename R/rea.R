@@ -23,23 +23,23 @@
 #' obj
 #' @export
 rea <- function(signatures, groups, sweights = NULL,
-    gweights = NULL, minsize = 1) {
+                gweights = NULL, minsize = 1) {
     ### Remove small groups
     groups <- groups[sapply(groups, length) >=
-        minsize]
+                         minsize]
 
     ### Treat single 'signature'
     if (is.null(nrow(signatures))) {
         signatures <- matrix(signatures,
-            length(signatures), 1, dimnames = list(names(signatures),
-                "sample1"))
+                             length(signatures), 1, dimnames = list(names(signatures),
+                                                                    "sample1"))
     }
 
 
     ### Generate dummy signature weights
     if (is.null(sweights)) {
         sweights <- matrix(1, nrow = nrow(signatures),
-            ncol = ncol(signatures))
+                           ncol = ncol(signatures))
         dimnames(sweights) <- dimnames(signatures)
     }
     if (!identical(dim(signatures), dim(sweights))) {
@@ -50,7 +50,7 @@ rea <- function(signatures, groups, sweights = NULL,
     ### Generate dummy group weights
     if (is.null(gweights)) {
         gweights <- relist(rep(1, sum(sapply(groups,
-            length))), skeleton = groups)
+                                             length))), skeleton = groups)
     }
 
     ### Apply weights to group belonging
@@ -66,7 +66,7 @@ rea <- function(signatures, groups, sweights = NULL,
     sweights[is.na(ranks)] <- 0
     ### 0-1 bound ranks
     boundranks <- t(t(ranks)/(colSums(!is.na(signatures)) +
-        1))
+                                  1))
     # Treat bound ranks as quantiles in a
     # gaussian distribution (0=-Inf, 1=+Inf)
     gaussian <- qnorm(boundranks)
@@ -84,9 +84,9 @@ rea <- function(signatures, groups, sweights = NULL,
     ### columns and signaturelength rows,
     ### indicating the matches
     matches <- sapply(wgroups, function(group,
-        allElements) {
+                                        allElements) {
         hereMatches <- as.integer(allElements %in%
-            names(group))
+                                      names(group))
         names(hereMatches) <- allElements
         # Weigth by group belonging
         weightedMatches <- hereMatches
