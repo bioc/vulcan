@@ -74,7 +74,8 @@ wstouffer <- function(x, w) {
 #' @export
 fisherp <- function(ps) {
     Xsq <- -2 * sum(log(ps))
-    p.val <- pchisq(Xsq, df = 2 * length(ps), lower.tail = FALSE)
+    p.val <- pchisq(Xsq, df = 2 * length(ps), 
+        lower.tail = FALSE)
     # p<-c(Xsq = Xsq, p.value = p.val)
     return(p.val)
 }
@@ -121,7 +122,8 @@ slice <- function(matrix) {
 corr2p <- function(r, N) {
     # Get the t-distribution value
     t <- r/sqrt((1 - r^2)/(N - 2))
-    # t follows the t distribution with df=N?2
+    # t follows the t distribution with
+    # df=N?2
     p <- 1 - pt(abs(t), N - 2)
     return(p)
 }
@@ -164,8 +166,9 @@ p2corr <- function(p, N) {
 #' cols<-val2col(a)
 #' plot(a,col=cols,pch=16)
 #' @export
-val2col <- function(z, col1 = "navy", col2 = "white", col3 = "red3", nbreaks = 100, 
-    center = TRUE, rank = FALSE) {
+val2col <- function(z, col1 = "navy", col2 = "white", 
+    col3 = "red3", nbreaks = 100, center = TRUE, 
+    rank = FALSE) {
     isMatrix <- FALSE
     if (is.matrix(z)) {
         isMatrix <- TRUE
@@ -179,7 +182,8 @@ val2col <- function(z, col1 = "navy", col2 = "white", col3 = "red3", nbreaks = 1
     }
     if (center) {
         extreme = round(max(abs(z)))
-        breaks <- seq(-extreme, extreme, length = nbreaks)
+        breaks <- seq(-extreme, extreme, 
+            length = nbreaks)
         z <- z - mean(z)
     } else {
         breaks <- seq(min(z), max(z), length = nbreaks)
@@ -191,7 +195,8 @@ val2col <- function(z, col1 = "navy", col2 = "white", col3 = "red3", nbreaks = 1
     colorlevels <- col[match(CUT, levels(CUT))]
     names(colorlevels) <- names(z)
     if (isMatrix) {
-        colormatrix <- matrix(colorlevels, ncol = ncol(oriz), nrow = nrow(oriz))
+        colormatrix <- matrix(colorlevels, 
+            ncol = ncol(oriz), nrow = nrow(oriz))
         dimnames(colormatrix) <- dimnames(oriz)
         return(colormatrix)
     }
@@ -284,8 +289,10 @@ kmgformat <- function(input, roundParam = 1) {
 #'
 #' @export
 densityauc <- function(dens, window) {
-    xt <- diff(dens$x[dens$x > window[1] & dens$x < window[2]])
-    yt <- rollmean(dens$y[dens$x > window[1] & dens$x < window[2]], 2)
+    xt <- diff(dens$x[dens$x > window[1] & 
+        dens$x < window[2]])
+    yt <- rollmean(dens$y[dens$x > window[1] & 
+        dens$x < window[2]], 2)
     sum(xt * yt)
 }
 
@@ -316,27 +323,33 @@ densityauc <- function(dens, window) {
 #' top<-names(sort(-a))[1:50]
 #' textplot2(a[top],b[top],words=top,new=FALSE,pointcolor='black')
 #' @export
-textplot2 <- function(x, y, words, cex = 1, pch = 16, pointcolor = "#FFFFFF00", new = TRUE, 
+textplot2 <- function(x, y, words, cex = 1, 
+    pch = 16, pointcolor = "#FFFFFF00", new = TRUE, 
     show.lines = TRUE, ...) {
     if (new) {
         plot(x, y, type = "n", ...)
     }
     lay <- wordlayout(x, y, words, cex, ...)
     if (show.lines) {
-        for (i in 1:length(x)) {
+        for (i in seq_len(x)) {
             xl <- lay[i, 1]
             yl <- lay[i, 2]
             w <- lay[i, 3]
             h <- lay[i, 4]
-            if (x[i] < xl || x[i] > xl + w || y[i] < yl || y[i] > yl + h) {
-                points(x[i], y[i], pch = pch, col = pointcolor, cex = 0.5)
+            if (x[i] < xl || x[i] > xl + 
+                w || y[i] < yl || y[i] > 
+                yl + h) {
+                points(x[i], y[i], pch = pch, 
+                  col = pointcolor, cex = 0.5)
                 nx <- xl + 0.5 * w
                 ny <- yl + 0.5 * h
-                lines(c(x[i], nx), c(y[i], ny), col = "grey")
+                lines(c(x[i], nx), c(y[i], 
+                  ny), col = "grey")
             }
         }
     }
-    text(lay[, 1] + 0.5 * lay[, 3], lay[, 2] + 0.5 * lay[, 4], words, cex = cex, 
+    text(lay[, 1] + 0.5 * lay[, 3], lay[, 
+        2] + 0.5 * lay[, 4], words, cex = cex, 
         ...)
 }
 
@@ -356,18 +369,25 @@ textplot2 <- function(x, y, words, cex = 1, pch = 16, pointcolor = "#FFFFFF00", 
 #' unlink(sheetfile)
 #' average_fragment_length(bams,plot=TRUE)
 #' @export
-average_fragment_length <- function(bam.files, plot = TRUE, max.dist = 550) {
-    # obtain average fragment length from cross-correlation of plus/minus strand
+average_fragment_length <- function(bam.files, 
+    plot = TRUE, max.dist = 550) {
+    # obtain average fragment length from
+    # cross-correlation of plus/minus strand
     # alignments
-    x <- csaw::correlateReads(bam.files, max.dist = max.dist)
+    x <- csaw::correlateReads(bam.files, 
+        max.dist = max.dist)
     # visualize (raw and smoothed)
-    xs <- caTools::runmean(Rle(x), k = 101, endrule = "constant")
+    xs <- caTools::runmean(Rle(x), k = 101, 
+        endrule = "constant")
     frag.len <- which.max(xs)
     if (plot) {
-        plot(0:max.dist, x, pch = "*", ylab = "CCF", xlab = "Delay (bp)")
-        lines(0:max.dist, xs, col = "red", lwd = 3)
+        plot(0:max.dist, x, pch = "*", ylab = "CCF", 
+            xlab = "Delay (bp)")
+        lines(0:max.dist, xs, col = "red", 
+            lwd = 3)
         abline(v = frag.len, col = "blue")
-        legend("topright", paste0("fragment-length = ", frag.len, "bp"), bty = "n")
+        legend("topright", paste0("fragment-length = ", 
+            frag.len, "bp"), bty = "n")
     }
     return(frag.len)
 }

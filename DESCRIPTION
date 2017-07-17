@@ -1,7 +1,7 @@
 Package: vulcan
 Type: Package
 Title: VirtUaL ChIP-Seq data Analysis using Networks
-Version: 0.99.10
+Version: 0.99.11
 Author: Federico M. Giorgi, Andrew N. Holding, Florian Markowetz
 Maintainer: Federico M. Giorgi <federico.giorgi@gmail.com>
 Description: Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a package
@@ -18,7 +18,7 @@ LazyData: TRUE
 biocViews: SystemsBiology, NetworkEnrichment, GeneExpression, ChIPSeq
 NeedsCompilation: no
 Suggests: vulcandata
-Depends: R (>= 3.4), IRanges, DiffBind, viper, ChIPpeakAnno, gplots,
+Depends: R (>= 3.3), IRanges, DiffBind, viper, ChIPpeakAnno, gplots,
     TxDb.Hsapiens.UCSC.hg19.knownGene, DESeq, zoo, wordcloud, csaw,
     caTools
 Encoding: UTF-8
