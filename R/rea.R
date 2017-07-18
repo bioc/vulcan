@@ -31,8 +31,9 @@ rea <- function(signatures, groups, sweights = NULL,
     ### Treat single 'signature'
     if (is.null(nrow(signatures))) {
         signatures <- matrix(signatures,
-                             length(signatures), 1, dimnames = list(names(signatures),
-                                                                    "sample1"))
+                             length(signatures), 1,
+                             dimnames = list(names(signatures),
+                                             "sample1"))
     }
 
 

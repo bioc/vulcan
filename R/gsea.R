@@ -22,7 +22,8 @@
 #' obj$p.value
 #' @export
 gsea <- function(reflist, set, method = c("permutation",
-                                          "pareto"), np = 1000, w = 1, gsea_null = NULL) {
+                                          "pareto"),
+                 np = 1000, w = 1, gsea_null = NULL) {
 
     # Get elements in set that are in the ref
     # list
@@ -247,9 +248,12 @@ null_gsea <- function(set, reflist, w = 1,
 #' plot_gsea(obj)
 #' @export
 plot_gsea <- function(gsea.obj, twoColors = c("red",
-                                              "blue"), plotNames = FALSE, colBarcode = "black",
-                      title = "Running Enrichment Score", correctEntrez = FALSE,
-                      bottomYtitle = "List Values", bottomYlabel = "Signature values",
+                                              "blue"),
+                      plotNames = FALSE, colBarcode = "black",
+                      title = "Running Enrichment Score",
+                      correctEntrez = FALSE,
+                      bottomYtitle = "List Values",
+                      bottomYlabel = "Signature values",
                       ext_nes = NULL, omit_middle = FALSE) {
     # Extract parameters from the gsea object
     es <- gsea.obj$es
@@ -375,17 +379,21 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
         # If an external NES is not provided, the
         # standard GSEA one is shown
         if (is.null(ext_nes)) {
-            legend(legend_position, legend = c(paste("ES = ",
-                                                     signif(es, 3), sep = ""),
-                                               paste("NES = ", signif(nes,
-                                                                      3), sep = ""), paste("p-value = ",
-                                                                                           signif(p.value, 3), sep = "")),
+            legend(legend_position,
+                   legend = c(paste("ES = ",
+                                    signif(es, 3), sep = ""),
+                              paste("NES = ", signif(nes,
+                                                     3), sep = ""),
+                              paste("p-value = ",
+                                    signif(p.value, 3), sep = "")),
                    bg = "white")
         } else {
-            legend(legend_position, legend = c(paste("NES = ",
-                                                     signif(ext_nes, 3), sep = ""),
-                                               paste("p-value = ", signif(z2p(ext_nes),
-                                                                          3), sep = "")), bg = "white")
+            legend(legend_position,
+                   legend = c(paste("NES = ",
+                                    signif(ext_nes, 3), sep = ""),
+                              paste("p-value = ",
+                                    signif(z2p(ext_nes),
+                                           3), sep = "")), bg = "white")
         }
     }
 
@@ -412,17 +420,22 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
         # If an external NES is not provided, the
         # standard GSEA one is shown
         if (is.null(ext_nes)) {
-            legend("top", legend = c(paste("ES = ",
-                                           signif(es, 3), sep = ""),
-                                     paste("NES = ", signif(nes,
-                                                            3), sep = ""), paste("p-value = ",
-                                                                                 signif(p.value, 3), sep = "")),
+            legend("top",
+                   legend = c(paste("ES = ",
+                                    signif(es, 3), sep = ""),
+                              paste("NES = ",
+                                    signif(nes,
+                                           3), sep = ""),
+                              paste("p-value = ",
+                                    signif(p.value, 3), sep = "")),
                    bg = "white")
         } else {
-            legend("top", legend = c(paste("NES = ",
-                                           signif(ext_nes, 3), sep = ""),
-                                     paste("p-value = ", signif(z2p(ext_nes),
-                                                                3), sep = "")), bg = "white")
+            legend("top",
+                   legend = c(paste("NES = ",
+                                    signif(ext_nes, 3), sep = ""),
+                              paste("p-value = ", signif(z2p(ext_nes),
+                                                         3), sep = "")),
+                   bg = "white")
         }
     }
 
@@ -544,7 +557,8 @@ pareto.fit <- function(data, threshold) {
     # KS distance
     newdata <- data[data >= threshold]
     d <- suppressWarnings(ks.test(newdata,
-                                  ppareto, threshold = threshold, exponent = alpha))
+                                  ppareto, threshold = threshold,
+                                  exponent = alpha))
     ks.dist <- as.vector(d$statistic)
     fit <- list(type = "pareto", exponent = alpha,
                 xmin = threshold, loglike = loglike,
