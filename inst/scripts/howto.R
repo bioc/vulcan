@@ -27,5 +27,5 @@ cat("import(DiffBind)\n",file="NAMESPACE",append=TRUE)
 cat("import(TxDb.Hsapiens.UCSC.hg19.knownGene)\n",file="NAMESPACE",append=TRUE)
 cat("import(csaw)\n",file="NAMESPACE",append=TRUE)
 cat("import(wordcloud)\n",file="NAMESPACE",append=TRUE)
-cat("import(caTools)\n",file="NAMESPACE",append=TRUE)
+#cat("import(caTools)\n",file="NAMESPACE",append=TRUE)
 
