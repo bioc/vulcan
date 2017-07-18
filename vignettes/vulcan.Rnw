@@ -8,7 +8,8 @@
 \usepackage{authblk}
 \usepackage[utf8]{inputenc}
 
-\title{Using vulcan, a package that combines regulatory networks and ChIP-Seq data to identify chromatin-binding cofactors}
+\title{Using vulcan, a package that combines regulatory networks and ChIP-Seq
+data to identify chromatin-binding cofactors}
 \author[1]{Federico M. Giorgi}
 \author[1]{Andrew N. Holding}
 \author[1]{Florian Markowetz}
@@ -21,15 +22,40 @@
 
 %-----------
 \section{Overview of VULCAN}\label{sec:overview}
-Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a pipeline that combines ChIP-Seq data and regulatory networks to obtain transcription factors that are likely affected by a specific stimulus. In order to do so, our package combines strategies from different BioConductor packages: \emph{DESeq} for data normalization, \emph{ChIPpeakAnno} and \emph{DiffBind} for annotation and definition of ChIP-Seq genomic peaks, \emph{csaw} to define optimal peak width and \emph{viper} for applying a regulatory network over a differential binding signature.
-Usage of gene regulatory networks to analyze biological systems has witnessed an exponential increase in the last decade, due to the ease of obtaining genome-wide expression data (Margolin et al., 2005; Giorgi et al., 2013; Castro et al., 2015). Recently, the VIPER approach to interrogate these network models has been proposed to infer transcription factor activity using the expression of a collection of their putative targets, i.e. their regulon (Alvarez et al., 2016). In the VIPER algorithm, gene-level differential expression signatures are obtained for either individual samples (relative to the mean of the dataset) or between groups of samples, and regulons are tested for enrichment. Ideally, TF regulons can be tested on promoter-level differential binding signatures generated from ChIP-Seq experiments, in order to ascertain the global change in promoter occupancy for gene sets. In our study, we propose an extension of the VIPER algorithm to specifically analyze TF occupancy in ChIP-Seq experiments. Our VULCAN algorithm uses ChIP-Seq data obtained for a given TF to provide candidate coregulators of the response to a given stimulus. The analysis is based on identifying differentially bound genes and testing their enrichment in the regulon of potential co-regulatory factors.
+Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a pipeline that combines
+ChIP-Seq data and regulatory networks to obtain transcription factors that are
+likely affected by a specific stimulus. In order to do so, our package combines
+strategies from different BioConductor packages: \emph{DESeq} for data
+normalization, \emph{ChIPpeakAnno} and \emph{DiffBind} for annotation and
+definition of ChIP-Seq genomic peaks, \emph{csaw} to define optimal peak width
+and \emph{viper} for applying a regulatory network over a differential binding
+signature.
+Usage of gene regulatory networks to analyze biological systems has witnessed
+an exponential increase in the last decade, due to the ease of obtaining
+genome-wide expression data (Margolin et al., 2005; Giorgi et al., 2013; Castro
+et al., 2015). Recently, the VIPER approach to interrogate these network models
+has been proposed to infer transcription factor activity using the expression
+of a collection of their putative targets, i.e. their regulon (Alvarez et al.,
+2016). In the VIPER algorithm, gene-level differential expression signatures
+are obtained for either individual samples (relative to the mean of the dataset)
+or between groups of samples, and regulons are tested for enrichment. Ideally,
+TF regulons can be tested on promoter-level differential binding signatures
+generated from ChIP-Seq experiments, in order to ascertain the global change
+in promoter occupancy for gene sets. In our study, we propose an extension
+of the VIPER algorithm to specifically analyze TF occupancy in ChIP-Seq
+experiments. Our VULCAN algorithm uses ChIP-Seq data obtained for a given TF
+to provide candidate coregulators of the response to a given stimulus.
+The analysis is based on identifying differentially bound genes and testing
+their enrichment in the regulon of potential co-regulatory factors.
 
 %--------
 \section{Citation}
-Giorgi FM, Holding AN \& Markowetz F. Network Dynamics of early ER-alpha promoter binding in response to estradiol. Genome Biology (Submitted).
+Giorgi FM, Holding AN \& Markowetz F. Network Dynamics of early ER-alpha
+promoter binding in response to estradiol. Genome Biology (Submitted).
 %--------
 \section{Installation of \emph{vulcan} package}
-VULCAN requires the R-system (\url{http://www.r-project.org}), and the \emph{vulcandata} package to run the examples.
+VULCAN requires the R-system (\url{http://www.r-project.org}), and the
+\emph{vulcandata} package to run the examples.
 After installing R, all required components can be obtained with:
 
 <<echo=FALSE, results=hide>>=
@@ -48,7 +74,8 @@ As first step, we have to load the vulcan package with:
 <<echo=TRUE, results=hide>>=
 library(vulcan)
 @
-Only to run the examples, a set of reduced BAM files can be accessed by loading the \emph{vulcandata} package:
+Only to run the examples, a set of reduced BAM files can be accessed by loading
+the \emph{vulcandata} package:
 <<echo=TRUE, results=hide>>=
 library(vulcandata)
 @
@@ -85,14 +112,18 @@ names(vobj$samples)
 @
 
 \subsection{Load an ARACNe network}
-We will use a regulon object as specified in the \emph{viper} package, named "network"
+We will use a regulon object as specified in the \emph{viper} package, named
+"network"
 <<echo=TRUE, results=hide>>=
 load(system.file("extdata","network.rda",package="vulcandata",mustWork=TRUE))
 @
 
 \subsection{Run VULCAN}
-Once we have prepared 1) the ChIP-Seq annotated and normalized object and 2) a gene regulatory network, we can run the VULCAN pipeline.
-We can reduce the minimum regulon size, since in the \emph{vulcandata} example only one chromosome was used, and the networks would otherwise have too few hits. We can then visualize the output using the msviper plotting function
+Once we have prepared 1) the ChIP-Seq annotated and normalized object and 2)
+a gene regulatory network, we can run the VULCAN pipeline.
+We can reduce the minimum regulon size, since in the \emph{vulcandata} example
+only one chromosome was used, and the networks would otherwise have too few
+hits. We can then visualize the output using the msviper plotting function
 <<echo=TRUE, results=hide, fig=TRUE>>=
 vobj_analysis<-vulcan(vobj,network=network,contrast=c("t90","t0"),minsize=5)
 plot(vobj_analysis$msviper,mrs=7)
@@ -103,7 +134,11 @@ plot(vobj_analysis$msviper,mrs=7)
 \section{More convenience tools for ChIP-Seq functional data analysis}
 
 \subsection{Gene Set Enrichment Analysis}
-VULCAN contains a GSEA (Subramanian et al., 2005) implementation that can fit a Pareto tail distribution for p-value estimation. In the following example, we generate an artificial signature of 1000 genes with normally-distributed positive expression. The gene set that is evaluated is composed by 50 genes randomly picked from one of the tails
+VULCAN contains a GSEA (Subramanian et al., 2005) implementation that can fit
+a Pareto tail distribution for p-value estimation. In the following example,
+we generate an artificial signature of 1000 genes with normally-distributed
+positive expression. The gene set that is evaluated is composed by 50 genes
+randomly picked from one of the tails
 <<echo=TRUE, results=hide>>=
 reflist<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
 set<-paste0("gene",sample(1:200,50))
@@ -116,7 +151,9 @@ plot_gsea(obj)
 @
 
 \subsection{Rank Enrichment Analysis}
-Rank Enrichment Analysis (REA Calculates) enrichment of groups of objects over a vector of values associated to a population of objects using a linear algebraic matrix multiplication.
+Rank Enrichment Analysis (REA Calculates) enrichment of groups of objects over
+a vector of values associated to a population of objects using a linear
+algebraic matrix multiplication.
 <<echo=TRUE, results=hide>>=
 signatures<-setNames(-sort(rnorm(1000)),paste0("gene",1:1000))
 set1<-paste0("gene",sample(1:200,50))
@@ -128,7 +165,9 @@ obj
 
 
 \subsection{Convenience functions}
-The function \emph{kmgformat} will convert thousand numbers to K, millions to M, billions to G, trillions to T, quadrillions to P. The function \emph{val2col} converts a distribution of numbers to a distribution of colors.
+The function \emph{kmgformat} will convert thousand numbers to K, millions to M,
+billions to G, trillions to T, quadrillions to P. The function \emph{val2col}
+converts a distribution of numbers to a distribution of colors.
 <<echo=TRUE, results=hide, fig=TRUE>>=
 par(mfrow=c(1,2))
 # Thousands

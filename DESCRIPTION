@@ -1,7 +1,7 @@
 Package: vulcan
 Type: Package
 Title: VirtUaL ChIP-Seq data Analysis using Networks
-Version: 0.99.15
+Version: 0.99.16
 Author: Federico M. Giorgi, Andrew N. Holding, Florian Markowetz
 Maintainer: Federico M. Giorgi <federico.giorgi@gmail.com>
 Description: Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a package
