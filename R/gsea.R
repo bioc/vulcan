@@ -22,8 +22,8 @@
 #' obj$p.value
 #' @export
 gsea <- function(reflist, set, method = c("permutation",
-                                          "pareto"),
-                 np = 1000, w = 1, gsea_null = NULL) {
+    "pareto"),
+    np = 1000, w = 1, gsea_null = NULL) {
 
     # Get elements in set that are in the ref
     # list
@@ -64,15 +64,15 @@ gsea <- function(reflist, set, method = c("permutation",
     # Safety measure, in the case the random
     # genes have all a weight of 0
     if (all(is.na(running_score))) {
-        running_score <- rep(0, length(running_score))
+    running_score <- rep(0, length(running_score))
     }
 
     # The ES is actually the minimum or
     # maximum Running Scores
     if (abs(max(running_score)) > abs(min(running_score))) {
-        es <- max(running_score)
+    es <- max(running_score)
     } else {
-        es <- min(running_score)
+    es <- min(running_score)
     }
 
 
@@ -81,23 +81,23 @@ gsea <- function(reflist, set, method = c("permutation",
     ledge_indeces <- rep(0, length(running_score))
     # Case 1: negative ES
     if (es < 0) {
-        peak <- which(running_score == min(running_score))[1]
-        ledge_indeces[peak:length(ledge_indeces)] <- 1  # Leading edge is
-        # stuff AFTER the peak point (ES is
-        # negative)
-        ledge_indeces <- which(ledge_indeces ==
-                                   1)
-        ledge_names <- names(reflist[ledge_indeces])
+    peak <- which(running_score == min(running_score))[1]
+    ledge_indeces[peak:length(ledge_indeces)] <- 1  # Leading edge is
+    # stuff AFTER the peak point (ES is
+    # negative)
+    ledge_indeces <- which(ledge_indeces ==
+    1)
+    ledge_names <- names(reflist[ledge_indeces])
     } else {
-        # Case 2: positive ES Define the peak
-        # point
-        peak <- which(running_score == max(running_score))
-        # Leading edge is stuff BEFORE the peak
-        # point (ES is positive)
-        ledge_indeces[1:peak] <- 1
-        ledge_indeces <- which(ledge_indeces ==
-                                   1)
-        ledge_names <- names(reflist[ledge_indeces])
+    # Case 2: positive ES Define the peak
+    # point
+    peak <- which(running_score == max(running_score))
+    # Leading edge is stuff BEFORE the peak
+    # point (ES is positive)
+    ledge_indeces[1:peak] <- 1
+    ledge_indeces <- which(ledge_indeces ==
+    1)
+    ledge_names <- names(reflist[ledge_indeces])
     }
 
 
@@ -106,22 +106,22 @@ gsea <- function(reflist, set, method = c("permutation",
 
     ### Compute p-value by permutation
     if (is.null(gsea_null)) {
-        null_es <- null_gsea(set = set, reflist = reflist,
-                             np = np, w = w)
+    null_es <- null_gsea(set = set, reflist = reflist,
+    np = np, w = w)
     } else {
-        ### If a null list is provided, use it
-        if (class(gsea_null) == "gsea_nullist") {
-            null_es <- gsea_null[as.character(length(set))][[1]]
-        } else {
-            null_es <- gsea_null
-        }
+    ### If a null list is provided, use it
+    if (class(gsea_null) == "gsea_nullist") {
+    null_es <- gsea_null[as.character(length(set))][[1]]
+    } else {
+    null_es <- gsea_null
+    }
     }
     # The empirical p-value will be
     # calculated
     if (es < 0) {
-        p.value <- sum(null_es <= es)/length(null_es)
+    p.value <- sum(null_es <= es)/length(null_es)
     } else {
-        p.value <- sum(null_es >= es)/length(null_es)
+    p.value <- sum(null_es >= es)/length(null_es)
     }
     # }
 
@@ -129,26 +129,26 @@ gsea <- function(reflist, set, method = c("permutation",
     # If we are in the tail, the p-value can
     # be calculated in two ways
     if (is.na(p.value) || p.value < 0.05) {
-        if (p.value == 0) {
-            p.value <- 1/np
-        }
-        if (method == "pareto") {
-            # Extract the absolute null ESs above the
-            # 95th percentile
-            q95 <- as.numeric(quantile(abs(null_es),
-                                       0.95))
-            fit <- pareto.fit(abs(null_es),
-                              threshold = q95)
-            newp.value <- ppareto(abs(es),
-                                  threshold = q95, exponent = fit$exponent,
-                                  lower.tail = FALSE)/20
-            # Brutal fix, if Pareto cannot fix small
-            # ESs, take the permutation p-value
-            if (is.na(newp.value)) {
-                newp.value <- p.value
-            }
-            p.value <- newp.value
-        }
+    if (p.value == 0) {
+    p.value <- 1/np
+    }
+    if (method == "pareto") {
+    # Extract the absolute null ESs above the
+    # 95th percentile
+    q95 <- as.numeric(quantile(abs(null_es),
+    0.95))
+    fit <- pareto.fit(abs(null_es),
+    threshold = q95)
+    newp.value <- ppareto(abs(es),
+    threshold = q95, exponent = fit$exponent,
+    lower.tail = FALSE)/20
+    # Brutal fix, if Pareto cannot fix small
+    # ESs, take the permutation p-value
+    if (is.na(newp.value)) {
+    newp.value <- p.value
+    }
+    p.value <- newp.value
+    }
     }
 
     # Calculate the normalized enrichment
@@ -156,9 +156,9 @@ gsea <- function(reflist, set, method = c("permutation",
     nes <- p2z(p.value) * sign(es)
 
     gsea.obj <- list(es = es, nes = nes,
-                     p.value = p.value, ledge = ledge_names,
-                     running_score = running_score, set = set,
-                     reflist = reflist, inSet = inSet)
+    p.value = p.value, ledge = ledge_names,
+    running_score = running_score, set = set,
+    reflist = reflist, inSet = inSet)
     class(gsea.obj) <- "gsea"
     return(gsea.obj)
 }
@@ -182,44 +182,44 @@ gsea <- function(reflist, set, method = c("permutation",
 #' nulldist[1:10]
 #' @export
 null_gsea <- function(set, reflist, w = 1,
-                      np = 1000) {
+    np = 1000) {
     gsea_null <- sapply(seq_len(np), function(i) {
-        # Identify indexes of set within the
-        # sorted reference list
-        inSet <- rep(0, length(reflist))
-        inSet[which(names(reflist) %in% set)] <- 1
+    # Identify indexes of set within the
+    # sorted reference list
+    inSet <- rep(0, length(reflist))
+    inSet[which(names(reflist) %in% set)] <- 1
 
-        # By sampling the order of the set
-        # elements, we get the real permutation
-        if (length(inSet == 0)) {
-            return(0)
-        } else {
-            null_inSet <- inSet[sample(1:length(inSet))]
-        }
+    # By sampling the order of the set
+    # elements, we get the real permutation
+    if (length(inSet == 0)) {
+    return(0)
+    } else {
+    null_inSet <- inSet[sample(1:length(inSet))]
+    }
 
-        # Same as before, cumulative sums of hits
-        # and nonhits
-        null_hit <- abs(reflist * null_inSet)
-        null_hit <- null_hit^w
-        null_hit <- cumsum(null_hit)
-        null_hit <- null_hit/null_hit[length(null_hit)]
-        null_miss <- cumsum(1 - null_inSet)
-        null_miss <- null_miss/null_miss[length(null_miss)]
-        # And dependending on the cumulative
-        # sums, null running sum and null
-        # enrichment score
-        null_running_score <- null_hit -
-            null_miss
+    # Same as before, cumulative sums of hits
+    # and nonhits
+    null_hit <- abs(reflist * null_inSet)
+    null_hit <- null_hit^w
+    null_hit <- cumsum(null_hit)
+    null_hit <- null_hit/null_hit[length(null_hit)]
+    null_miss <- cumsum(1 - null_inSet)
+    null_miss <- null_miss/null_miss[length(null_miss)]
+    # And dependending on the cumulative
+    # sums, null running sum and null
+    # enrichment score
+    null_running_score <- null_hit -
+    null_miss
 
-        # The ES is just he maximum or the
-        # minimum
-        if (abs(max(null_running_score)) >
-            abs(min(null_running_score))) {
-            null_es <- max(null_running_score)
-        } else {
-            null_es <- min(null_running_score)
-        }
-        return(null_es)
+    # The ES is just he maximum or the
+    # minimum
+    if (abs(max(null_running_score)) >
+    abs(min(null_running_score))) {
+    null_es <- max(null_running_score)
+    } else {
+    null_es <- min(null_running_score)
+    }
+    return(null_es)
     })
     class(gsea_null) <- "gsea_null"
     return(gsea_null)
@@ -248,13 +248,13 @@ null_gsea <- function(set, reflist, w = 1,
 #' plot_gsea(obj)
 #' @export
 plot_gsea <- function(gsea.obj, twoColors = c("red",
-                                              "blue"),
-                      plotNames = FALSE, colBarcode = "black",
-                      title = "Running Enrichment Score",
-                      correctEntrez = FALSE,
-                      bottomYtitle = "List Values",
-                      bottomYlabel = "Signature values",
-                      ext_nes = NULL, omit_middle = FALSE) {
+    "blue"),
+    plotNames = FALSE, colBarcode = "black",
+    title = "Running Enrichment Score",
+    correctEntrez = FALSE,
+    bottomYtitle = "List Values",
+    bottomYlabel = "Signature values",
+    ext_nes = NULL, omit_middle = FALSE) {
     # Extract parameters from the gsea object
     es <- gsea.obj$es
     nes <- gsea.obj$nes
@@ -267,8 +267,8 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
 
     # Convert to gene symbols
     if (correctEntrez) {
-        set <- e2s(set)
-        names(reflist) <- e2s(names(reflist))
+    set <- e2s(set)
+    names(reflist) <- e2s(names(reflist))
     }
 
     # Define plot borders? Who wrote the
@@ -281,21 +281,21 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
     max.corr <- max(reflist)
     min.corr <- min(reflist)
     corr0.line <- (-min.corr/(max.corr -
-                                  min.corr)) * 1.25 * delta + min.plot
+    min.corr)) * 1.25 * delta + min.plot
 
     if (es < 0) {
-        l.ledge.ref.plot <- length(reflist) -
-            length(ledge)
+    l.ledge.ref.plot <- length(reflist) -
+    length(ledge)
     } else {
-        l.ledge.ref.plot <- length(ledge)
+    l.ledge.ref.plot <- length(ledge)
     }
 
     # Define colors (red is positive nes,
     # blue is negative nes)
     if (nes > 0) {
-        col.f <- twoColors[1]
+    col.f <- twoColors[1]
     } else {
-        col.f <- twoColors[2]
+    col.f <- twoColors[2]
     }
     N <- length(reflist)
     ind <- 1:N
@@ -305,13 +305,13 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
     ### destructive putting everything in a
     ### single window
     if (omit_middle) {
-        layoutMatrix <- rbind(1, 2)
-        layout(layoutMatrix, heights = c(1,
-                                         2))
+    layoutMatrix <- rbind(1, 2)
+    layout(layoutMatrix, heights = c(1,
+    2))
     } else {
-        layoutMatrix <- rbind(1, 2, 3)
-        layout(layoutMatrix, heights = c(1,
-                                         4, 2))
+    layoutMatrix <- rbind(1, 2, 3)
+    layout(layoutMatrix, heights = c(1,
+    4, 2))
     }
 
 
@@ -320,123 +320,123 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
     ### PLOT 1: barcode-like enrichment tags
     par(mar = c(0, 4.1, 2, 2.1))
     plot(0, col = "white", xlim = c(1, N),
-         ylim = c(0, 10), xaxt = "n", yaxt = "n",
-         type = "n", frame.plot = FALSE, xlab = "",
-         ylab = "", xaxs = "r", yaxs = "r",
-         main = paste("Number of elements: ",
-                      N, " (in full list), ", length(set),
-                      " (in element set)", sep = "",
-                      collapse = ""))
+    ylim = c(0, 10), xaxt = "n", yaxt = "n",
+    type = "n", frame.plot = FALSE, xlab = "",
+    ylab = "", xaxs = "r", yaxs = "r",
+    main = paste("Number of elements: ",
+    N, " (in full list), ", length(set),
+    " (in element set)", sep = "",
+    collapse = ""))
     for (position in 1:N) {
-        if (inSet[position] == 1) {
-            if (N < 50 & length(set) <= 10) {
-                rect(xleft = position - 0.2,
-                     ybottom = 0, xright = position +
-                         0.2, ytop = 10, col = colBarcode,
-                     border = NA)
-            } else {
-                abline(v = position, lwd = 2,
-                       col = colBarcode)
-            }
-            if (plotNames) {
-                text(labels = names(reflist[position]),
-                     x = position - 0.2, y = 0,
-                     srt = 90, offset = 0, pos = 4,
-                     font = 2)
-            }
-        }
+    if (inSet[position] == 1) {
+    if (N < 50 & length(set) <= 10) {
+    rect(xleft = position - 0.2,
+    ybottom = 0, xright = position +
+    0.2, ytop = 10, col = colBarcode,
+    border = NA)
+    } else {
+    abline(v = position, lwd = 2,
+    col = colBarcode)
+    }
+    if (plotNames) {
+    text(labels = names(reflist[position]),
+    x = position - 0.2, y = 0,
+    srt = 90, offset = 0, pos = 4,
+    font = 2)
+    }
+    }
     }
 
     ### PLOT 2: The running sum plot
     if (!omit_middle) {
-        par(mar = c(2, 4.1, 2, 2.1))
-        plot(ind, running_score, sub = "",
-             xlab = "", ylab = "Enrichment Score",
-             xlim = c(1, N), ylim = c(min.plot,
-                                      max.plot), type = "l", pch = 20,
-             lwd = 4, cex = 1, col = col.f,
-             xaxs = "r", yaxs = "r", main = title)
-        grid(col = "dark grey", lty = 2)
+    par(mar = c(2, 4.1, 2, 2.1))
+    plot(ind, running_score, sub = "",
+    xlab = "", ylab = "Enrichment Score",
+    xlim = c(1, N), ylim = c(min.plot,
+    max.plot), type = "l", pch = 20,
+    lwd = 4, cex = 1, col = col.f,
+    xaxs = "r", yaxs = "r", main = title)
+    grid(col = "dark grey", lty = 2)
 
-        # This is important: zero running score
-        # line
-        lines(c(1, N), c(0, 0), lwd = 1,
-              lty = 1, cex = 1)
+    # This is important: zero running score
+    # line
+    lines(c(1, N), c(0, 0), lwd = 1,
+    lty = 1, cex = 1)
 
-        # This is also important: it's the max
-        # enrichment vertical line (aka LEADING
-        # EDGE)
-        lines(c(l.ledge.ref.plot, l.ledge.ref.plot),
-              c(min.plot, max.plot), lwd = 1,
-              lty = 1, cex = 1)
+    # This is also important: it's the max
+    # enrichment vertical line (aka LEADING
+    # EDGE)
+    lines(c(l.ledge.ref.plot, l.ledge.ref.plot),
+    c(min.plot, max.plot), lwd = 1,
+    lty = 1, cex = 1)
 
-        if (es >= 0) {
-            legend_position <- "topright"
-        } else {
-            legend_position <- "topleft"
-        }
+    if (es >= 0) {
+    legend_position <- "topright"
+    } else {
+    legend_position <- "topleft"
+    }
 
-        # If an external NES is not provided, the
-        # standard GSEA one is shown
-        if (is.null(ext_nes)) {
-            legend(legend_position,
-                   legend = c(paste("ES = ",
-                                    signif(es, 3), sep = ""),
-                              paste("NES = ", signif(nes,
-                                                     3), sep = ""),
-                              paste("p-value = ",
-                                    signif(p.value, 3), sep = "")),
-                   bg = "white")
-        } else {
-            legend(legend_position,
-                   legend = c(paste("NES = ",
-                                    signif(ext_nes, 3), sep = ""),
-                              paste("p-value = ",
-                                    signif(z2p(ext_nes),
-                                           3), sep = "")), bg = "white")
-        }
+    # If an external NES is not provided, the
+    # standard GSEA one is shown
+    if (is.null(ext_nes)) {
+    legend(legend_position,
+    legend = c(paste("ES = ",
+    signif(es, 3), sep = ""),
+    paste("NES = ", signif(nes,
+    3), sep = ""),
+    paste("p-value = ",
+    signif(p.value, 3), sep = "")),
+    bg = "white")
+    } else {
+    legend(legend_position,
+    legend = c(paste("NES = ",
+    signif(ext_nes, 3), sep = ""),
+    paste("p-value = ",
+    signif(z2p(ext_nes),
+    3), sep = "")), bg = "white")
+    }
     }
 
 
     ### Plot3: weight values
     if (omit_middle) {
-        bottomMain <- title
+    bottomMain <- title
     } else {
-        bottomMain <- bottomYtitle
+    bottomMain <- bottomYtitle
     }
 
     par(mar = c(2, 4.1, 2, 2.1))
     plot(ind, reflist, type = "l", pch = 20,
-         lwd = 3, xlim = c(1, N), cex = 1,
-         col = 1, xaxs = "r", yaxs = "r",
-         main = bottomMain, ylab = bottomYlabel,
-         cex.axis = 0.8)
+    lwd = 3, xlim = c(1, N), cex = 1,
+    col = 1, xaxs = "r", yaxs = "r",
+    main = bottomMain, ylab = bottomYlabel,
+    cex.axis = 0.8)
     grid(col = "dark grey", lty = 2)
     # zero correlation horizontal line
     lines(c(1, N), c(corr0.line, corr0.line),
-          lwd = 1, lty = 1, cex = 1, col = 1)
+    lwd = 1, lty = 1, cex = 1, col = 1)
 
     if (omit_middle) {
-        # If an external NES is not provided, the
-        # standard GSEA one is shown
-        if (is.null(ext_nes)) {
-            legend("top",
-                   legend = c(paste("ES = ",
-                                    signif(es, 3), sep = ""),
-                              paste("NES = ",
-                                    signif(nes,
-                                           3), sep = ""),
-                              paste("p-value = ",
-                                    signif(p.value, 3), sep = "")),
-                   bg = "white")
-        } else {
-            legend("top",
-                   legend = c(paste("NES = ",
-                                    signif(ext_nes, 3), sep = ""),
-                              paste("p-value = ", signif(z2p(ext_nes),
-                                                         3), sep = "")),
-                   bg = "white")
-        }
+    # If an external NES is not provided, the
+    # standard GSEA one is shown
+    if (is.null(ext_nes)) {
+    legend("top",
+    legend = c(paste("ES = ",
+    signif(es, 3), sep = ""),
+    paste("NES = ",
+    signif(nes,
+    3), sep = ""),
+    paste("p-value = ",
+    signif(p.value, 3), sep = "")),
+    bg = "white")
+    } else {
+    legend("top",
+    legend = c(paste("NES = ",
+    signif(ext_nes, 3), sep = ""),
+    paste("p-value = ", signif(z2p(ext_nes),
+    3), sep = "")),
+    bg = "white")
+    }
     }
 
 }
@@ -461,22 +461,22 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
 #' plot(dp)
 #' @export
 dpareto <- function(x, threshold = 1, exponent,
-                    log = FALSE) {
+    log = FALSE) {
     # Avoid doing limited-precision
     # arithmetic followed by logs if we want
     # the log!
     if (!log) {
-        prefactor <- (exponent - 1)/threshold
-        f <- function(x) {
-            prefactor * (x/threshold)^(-exponent)
-        }
+    prefactor <- (exponent - 1)/threshold
+    f <- function(x) {
+    prefactor * (x/threshold)^(-exponent)
+    }
     } else {
-        prefactor.log <- log(exponent - 1) -
-            log(threshold)
-        f <- function(x) {
-            prefactor.log - exponent * (log(x) -
-                                            log(threshold))
-        }
+    prefactor.log <- log(exponent - 1) -
+    log(threshold)
+    f <- function(x) {
+    prefactor.log - exponent * (log(x) -
+    log(threshold))
+    }
     }
     d <- ifelse(x < threshold, NA, f(x))
     return(d)
@@ -507,16 +507,16 @@ dpareto <- function(x, threshold = 1, exponent,
 #' text(value,0.2,labels=paste0('p=',signif(pvalue,2)))
 #' @export
 ppareto <- function(x, threshold = 1, exponent,
-                    lower.tail = TRUE) {
+    lower.tail = TRUE) {
     if (!lower.tail) {
-        f <- function(x) {
-            (x/threshold)^(1 - exponent)
-        }
+    f <- function(x) {
+    (x/threshold)^(1 - exponent)
+    }
     }
     if (lower.tail) {
-        f <- function(x) {
-            1 - (x/threshold)^(1 - exponent)
-        }
+    f <- function(x) {
+    1 - (x/threshold)^(1 - exponent)
+    }
     }
     p <- ifelse(x < threshold, NA, f(x))
     return(p)
@@ -553,16 +553,16 @@ pareto.fit <- function(data, threshold) {
     alpha <- 1 + n/sum(log(x))
     # Calculate Log-Likelihood
     loglike <- sum(dpareto(data, threshold = threshold,
-                           exponent = alpha, log = TRUE))
+    exponent = alpha, log = TRUE))
     # KS distance
     newdata <- data[data >= threshold]
     d <- suppressWarnings(ks.test(newdata,
-                                  ppareto, threshold = threshold,
-                                  exponent = alpha))
+    ppareto, threshold = threshold,
+    exponent = alpha))
     ks.dist <- as.vector(d$statistic)
     fit <- list(type = "pareto", exponent = alpha,
-                xmin = threshold, loglike = loglike,
-                ks.dist = ks.dist, samples.over.threshold = n)
+    xmin = threshold, loglike = loglike,
+    ks.dist = ks.dist, samples.over.threshold = n)
     return(fit)
 }
 

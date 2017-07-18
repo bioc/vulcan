@@ -75,7 +75,7 @@ wstouffer <- function(x, w) {
 fisherp <- function(ps) {
     Xsq <- -2 * sum(log(ps))
     p.val <- pchisq(Xsq, df = 2 * length(ps),
-            lower.tail = FALSE)
+    lower.tail = FALSE)
     # p<-c(Xsq = Xsq, p.value = p.val)
     return(p.val)
 }
@@ -167,8 +167,8 @@ p2corr <- function(p, N) {
 #' plot(a,col=cols,pch=16)
 #' @export
 val2col <- function(z, col1 = "navy", col2 = "white",
-            col3 = "red3", nbreaks = 100, center = TRUE,
-            rank = FALSE) {
+    col3 = "red3", nbreaks = 100, center = TRUE,
+    rank = FALSE) {
     isMatrix <- FALSE
     if (is.matrix(z)) {
     isMatrix <- TRUE
@@ -196,7 +196,7 @@ val2col <- function(z, col1 = "navy", col2 = "white",
     names(colorlevels) <- names(z)
     if (isMatrix) {
     colormatrix <- matrix(colorlevels,
-        ncol = ncol(oriz), nrow = nrow(oriz))
+    ncol = ncol(oriz), nrow = nrow(oriz))
     dimnames(colormatrix) <- dimnames(oriz)
     return(colormatrix)
     }
@@ -234,29 +234,29 @@ kmgformat <- function(input, roundParam = 1) {
     output <- c()
     for (i in absinput) {
     if (i < 1000) {
-        output <- c(output, i)
+    output <- c(output, i)
     } else if (i < 1e+06) {
-        i <- round(i/1000, roundParam)
-        i <- paste0(i, "K")
-        output <- c(output, i)
+    i <- round(i/1000, roundParam)
+    i <- paste0(i, "K")
+    output <- c(output, i)
     } else if (i < 1e+09) {
-        i <- round(i/1e+06, roundParam)
-        i <- paste0(i, "M")
-        output <- c(output, i)
+    i <- round(i/1e+06, roundParam)
+    i <- paste0(i, "M")
+    output <- c(output, i)
     } else if (i < 1e+12) {
-        i <- round(i/1e+09, roundParam)
-        i <- paste0(i, "G")
-        output <- c(output, i)
+    i <- round(i/1e+09, roundParam)
+    i <- paste0(i, "G")
+    output <- c(output, i)
     } else if (i < 1e+15) {
-        i <- round(i/1e+12, roundParam)
-        i <- paste0(i, "T")
-        output <- c(output, i)
+    i <- round(i/1e+12, roundParam)
+    i <- paste0(i, "T")
+    output <- c(output, i)
     } else if (i < 1e+18) {
-        i <- round(i/1e+15, roundParam)
-        i <- paste0(i, "P")
-        output <- c(output, i)
+    i <- round(i/1e+15, roundParam)
+    i <- paste0(i, "P")
+    output <- c(output, i)
     } else {
-        output <- c(output, i)
+    output <- c(output, i)
     }
     }
     output <- paste0(signs, output)
@@ -292,7 +292,7 @@ densityauc <- function(dens, window) {
     xt <- diff(dens$x[dens$x > window[1] &
     dens$x < window[2]])
     yt <- rollmean(dens$y[dens$x > window[1] &
-        dens$x < window[2]], 2)
+    dens$x < window[2]], 2)
     sum(xt * yt)
 }
 
@@ -332,25 +332,25 @@ textplot2 <- function(x, y, words, cex = 1,
     lay <- wordlayout(x, y, words, cex, ...)
     if (show.lines) {
     for (i in seq_len(length(x))) {
-        xl <- lay[i, 1]
-        yl <- lay[i, 2]
-        w <- lay[i, 3]
-        h <- lay[i, 4]
-        if (x[i] < xl || x[i] > xl +
-        w || y[i] < yl || y[i] >
-        yl + h) {
-        points(x[i], y[i], pch = pch,
-     col = pointcolor, cex = 0.5)
-        nx <- xl + 0.5 * w
-        ny <- yl + 0.5 * h
-        lines(c(x[i], nx), c(y[i],
-          ny), col = "grey")
-        }
+    xl <- lay[i, 1]
+    yl <- lay[i, 2]
+    w <- lay[i, 3]
+    h <- lay[i, 4]
+    if (x[i] < xl || x[i] > xl +
+    w || y[i] < yl || y[i] >
+    yl + h) {
+    points(x[i], y[i], pch = pch,
+    col = pointcolor, cex = 0.5)
+    nx <- xl + 0.5 * w
+    ny <- yl + 0.5 * h
+    lines(c(x[i], nx), c(y[i],
+    ny), col = "grey")
+    }
     }
     }
     text(lay[, 1] + 0.5 * lay[, 3], lay[,
-              2] + 0.5 * lay[, 4], words, cex = cex,
-     ...)
+    2] + 0.5 * lay[, 4], words, cex = cex,
+    ...)
 }
 
 #' Define the average fragment length
@@ -370,24 +370,24 @@ textplot2 <- function(x, y, words, cex = 1,
 #' average_fragment_length(bams,plot=TRUE)
 #' @export
 average_fragment_length <- function(bam.files,
-          plot = TRUE, max.dist = 550) {
+    plot = TRUE, max.dist = 550) {
     # obtain average fragment length from
     # cross-correlation of plus/minus strand
     # alignments
     x <- csaw::correlateReads(bam.files,
-        max.dist = max.dist)
+    max.dist = max.dist)
     # visualize (raw and smoothed)
     xs <- caTools::runmean(Rle(x), k = 101,
-     endrule = "constant")
+    endrule = "constant")
     frag.len <- which.max(xs)
     if (plot) {
     plot(0:max.dist, x, pch = "*", ylab = "CCF",
-         xlab = "Delay (bp)")
+    xlab = "Delay (bp)")
     lines(0:max.dist, xs, col = "red",
-          lwd = 3)
+    lwd = 3)
     abline(v = frag.len, col = "blue")
     legend("topright", paste0("fragment-length = ",
-        frag.len, "bp"), bty = "n")
+    frag.len, "bp"), bty = "n")
     }
     return(frag.len)
 }

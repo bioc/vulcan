@@ -41,8 +41,8 @@ vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 vobj<-vulcan.normalize(vobj)
 # Create a dummy pathway list (in entrez ids)
 pathways<-list(
-    pathwayA=rownames(vobj$normalized)[1:20],
-    pathwayB=rownames(vobj$normalized)[21:50]
+   pathwayA=rownames(vobj$normalized)[1:20],
+   pathwayB=rownames(vobj$normalized)[21:50]
 )
 # Which contrast groups can be queried
 names(vobj$samples)

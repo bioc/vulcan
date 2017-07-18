@@ -13,7 +13,8 @@ data to identify chromatin-binding cofactors}
 \author[1]{Federico M. Giorgi}
 \author[1]{Andrew N. Holding}
 \author[1]{Florian Markowetz}
-\affil[1]{Cancer Research UK, Cambridge Institute, Robinson Way, Cambridge United Kingdom}
+\affil[1]{Cancer Research UK, Cambridge Institute, Robinson Way, Cambridge
+United Kingdom}
 \date{\today}
 
 \begin{document}
@@ -188,11 +189,26 @@ axis(2,at=pretty(a),labels=kmg)
 
 %-----------
 \begin{thebibliography}{99}
-\bibitem{Alvarez2013} Alvarez, M.J., Shen, Y., Giorgi, F.M., Lachmann, A., Ding, B.B., Ye, B.H., \& Califano, A. (2016). Functional characterization of somatic mutations in cancer using network-based inference of protein activity. Nature Genetics.
-\bibitem{Margolin2005} Margolin, A.A., Nemenman, I., Basso, K., Wiggins, C., Stolovitzky, G., Dalla Favera, R., \& Califano, A. (2006). ARACNE: an algorithm for the reconstruction of gene regulatory networks in a mammalian cellular context. BMC bioinformatics, 7(1), S7.
-\bibitem{Castro2015} Castro, M.A., de Santiago, I., Campbell, T.M., Vaughn, C., Hickey, T.E., Ross, E., Tilley, W.D., Markowetz, F., Ponder, B.A. \& Meyer, K.B., 2015. Regulators of genetic risk of breast cancer identified by integrative network analysis. Nature genetics.
-\bibitem{Giorgi2013} Giorgi, F.M., Del Fabbro, C., \& Licausi, F. (2013). Comparative study of RNA-seq-and microarray-derived coexpression networks in Arabidopsis thaliana. Bioinformatics, 29(6), 717-724.
-\bibitem{Subramanian2005} Subramanian, A., Tamayo, P., Mootha, V.K., Mukherjee, S., Ebert, B.L., Gillette, M.A. \& Mesirov, J.P. (2005). Gene set enrichment analysis: a knowledge-based approach for interpreting genome-wide expression profiles. Proceedings of the National Academy of Sciences, 102(43), 15545-15550.
+\bibitem{Alvarez2013} Alvarez, M.J., Shen, Y., Giorgi, F.M., Lachmann, A.,
+Ding, B.B., Ye, B.H., \& Califano, A. (2016). Functional characterization
+of somatic mutations in cancer using network-based inference of protein
+activity. Nature Genetics.
+\bibitem{Margolin2005} Margolin, A.A., Nemenman, I., Basso, K., Wiggins, C.,
+Stolovitzky, G., Dalla Favera, R., \& Califano, A. (2006). ARACNE: an algorithm
+for the reconstruction of gene regulatory networks in a mammalian cellular
+context. BMC bioinformatics, 7(1), S7.
+\bibitem{Castro2015} Castro, M.A., de Santiago, I., Campbell, T.M.,
+Vaughn, C., Hickey, T.E., Ross, E., Tilley, W.D., Markowetz, F.,
+Ponder, B.A. \& Meyer, K.B., 2015. Regulators of genetic risk of breast cancer
+identified by integrative network analysis. Nature genetics.
+\bibitem{Giorgi2013} Giorgi, F.M., Del Fabbro, C., \& Licausi, F. (2013).
+Comparative study of RNA-seq-and microarray-derived coexpression networks in
+Arabidopsis thaliana. Bioinformatics, 29(6), 717-724.
+\bibitem{Subramanian2005} Subramanian, A., Tamayo, P., Mootha, V.K.,
+Mukherjee, S., Ebert, B.L., Gillette, M.A. \& Mesirov, J.P. (2005).
+Gene set enrichment analysis: a knowledge-based approach for interpreting
+genome-wide expression profiles. Proceedings of the National Academy
+of Sciences, 102(43), 15545-15550.
 \end{thebibliography}
 %----------
 \end{document}

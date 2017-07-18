@@ -23,41 +23,41 @@
 #' obj
 #' @export
 rea <- function(signatures, groups, sweights = NULL,
-                gweights = NULL, minsize = 1) {
+    gweights = NULL, minsize = 1) {
     ### Remove small groups
     groups <- groups[sapply(groups, length) >=
-                         minsize]
+    minsize]
 
     ### Treat single 'signature'
     if (is.null(nrow(signatures))) {
-        signatures <- matrix(signatures,
-                             length(signatures), 1,
-                             dimnames = list(names(signatures),
-                                             "sample1"))
+    signatures <- matrix(signatures,
+    length(signatures), 1,
+    dimnames = list(names(signatures),
+    "sample1"))
     }
 
 
     ### Generate dummy signature weights
     if (is.null(sweights)) {
-        sweights <- matrix(1, nrow = nrow(signatures),
-                           ncol = ncol(signatures))
-        dimnames(sweights) <- dimnames(signatures)
+    sweights <- matrix(1, nrow = nrow(signatures),
+    ncol = ncol(signatures))
+    dimnames(sweights) <- dimnames(signatures)
     }
     if (!identical(dim(signatures), dim(sweights))) {
-        stop("Signatures and Signature weights must be
-             matrices of identical size")
+    stop("Signatures and Signature weights must be
+    matrices of identical size")
     }
 
     ### Generate dummy group weights
     if (is.null(gweights)) {
-        gweights <- relist(rep(1, sum(sapply(groups,
-                                             length))), skeleton = groups)
+    gweights <- relist(rep(1, sum(sapply(groups,
+    length))), skeleton = groups)
     }
 
     ### Apply weights to group belonging
     wgroups <- gweights
     for (i in seq_len(length(wgroups))) {
-        names(wgroups[[i]]) <- groups[[i]]
+    names(wgroups[[i]]) <- groups[[i]]
     }
 
     ### Rank-transform columns
@@ -67,7 +67,7 @@ rea <- function(signatures, groups, sweights = NULL,
     sweights[is.na(ranks)] <- 0
     ### 0-1 bound ranks
     boundranks <- t(t(ranks)/(colSums(!is.na(signatures)) +
-                                  1))
+    1))
     # Treat bound ranks as quantiles in a
     # gaussian distribution (0=-Inf, 1=+Inf)
     gaussian <- qnorm(boundranks)
@@ -85,15 +85,15 @@ rea <- function(signatures, groups, sweights = NULL,
     ### columns and signaturelength rows,
     ### indicating the matches
     matches <- sapply(wgroups, function(group,
-                                        allElements) {
-        hereMatches <- as.integer(allElements %in%
-                                      names(group))
-        names(hereMatches) <- allElements
-        # Weigth by group belonging
-        weightedMatches <- hereMatches
-        weightedMatches[names(group)] <- weightedMatches[names(group)] *
-            group
-        return(weightedMatches)
+    allElements) {
+    hereMatches <- as.integer(allElements %in%
+    names(group))
+    names(hereMatches) <- allElements
+    # Weigth by group belonging
+    weightedMatches <- hereMatches
+    weightedMatches[names(group)] <- weightedMatches[names(group)] *
+    group
+    return(weightedMatches)
     }, allElements = rownames(gaussian))
     # And then transpose it
     matches <- t(matches)
@@ -113,13 +113,13 @@ rea <- function(signatures, groups, sweights = NULL,
     # The core linear algebra operation. The
     # true magic of rea
     enrichmentScore <- relativematches %*%
-        gaussian
+    gaussian
 
     # Finally, every enrichment is
     # square-rooted to respect the criterion
     # of normality
     normalizedEnrichmentScore <- enrichmentScore *
-        sqrt(groupmatches)
+    sqrt(groupmatches)
 
     # Return output
     return(normalizedEnrichmentScore)
