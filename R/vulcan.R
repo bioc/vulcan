@@ -15,7 +15,7 @@
 #' \item{peakrpkms}{A matrix of peak RPKMs, peaks as rows, samples as
 #' columns}
 #' \item{samples}{A vector of sample names and conditions}
-#'
+#' }
 #' @examples
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
@@ -138,6 +138,7 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' \item{rpkms}{A matrix of RPKMs, genes as rows, samples as
 #' columns. The RPKMs are associated to the promoter region of the gene}
 #' \item{samples}{A vector of sample names and conditions}
+#' }
 #' @examples
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
