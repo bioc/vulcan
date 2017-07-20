@@ -36,10 +36,6 @@ representative one}
 representative one}
 }}
 }
-\value{
-a list of raw read counts and rpkms mapping to the promoter region of
-genes
-}
 \description{
 This function coalesces and annotates a set of BAM files into peak-centered
 data. It implements the ChIPPeakANno methods, with specific choices dealing

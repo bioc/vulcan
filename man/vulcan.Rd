@@ -22,7 +22,26 @@ Default (NULL) won't convert gene names.}
 to be run. Default: 10}
 }
 \value{
-a list
+A list of components:
+\describe{
+\item{peakcounts}{A matrix of raw peak counts, peaks as rows, samples as
+columns}
+\item{peakrpkms}{A matrix of peak RPKMs, peaks as rows, samples as
+columns}
+\item{rawcounts}{A matrix of raw gene counts, genes as rows, samples as
+columns. The counts are associated to the promoter region of the gene}
+\item{rpkms}{A matrix of RPKMs, genes as rows, samples as
+columns. The RPKMs are associated to the promoter region of the gene}
+\item{normalized}{A matrix of gene abundances normalized by
+Variance-Stabilizing Transformation (VST), genes as rows, samples as
+columns. The abundances are associated to the promoter
+region of the gene}
+\item{samples}{A vector of sample names and conditions}
+\item{msviper}{a multisample virtual proteomics object from the
+viper package}
+\item{mrs}{A table of master regulators for a specific signature, indicating
+their Normalized Enrichment Score (NES) and p-value}
+}
 }
 \description{
 This function calculates the enrichment of a gene regulatory network over a

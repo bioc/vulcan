@@ -13,9 +13,6 @@ and BAM location}
 \item{intervals}{size of the peaks. If NULL (default) it is inferred from
 the average fragment length observed in the dataset}
 }
-\value{
-a list
-}
 \description{
 This function coalesces and annotates a set of BAM files into peak-centered
 data
