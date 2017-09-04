@@ -182,8 +182,9 @@ vulcan.annotate <- function(vobj, lborder = -10000,
     genesone <- names(peakspergene)[peakspergene ==
                                         1]
     for (gene in genesone) {
-        rawcounts[gene, allsamples] <- as.numeric(dfanno[dfanno$feature ==
-                                                            gene, allsamples])
+        rawcounts[gene, allsamples] <-
+            as.numeric(dfanno[dfanno$feature ==
+                                gene, allsamples])
     }
 
     # Other methods: they deal with cases
@@ -255,78 +256,66 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
     }
 
 
-    # Method closest: when multiple peaks are
-    # found, keep only the closest to the TSS
-    # as the representative one
+    for (gene in genesmore) {
+        subanno <- dfanno[dfanno$feature == gene, ]
 
-    # Method farthest: when multiple peaks
-    # are found, keep only the closest to the
-    # TSS as the representative one
 
-    if (method == "closest" | method == "farthest") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == gene, ]
-            if(method=="closest"){
-                hit <- which.min(subanno$distanceToStart)
-            }
-            if(method=="farthest"){
-                hit <- which.max(subanno$distanceToStart)
-            }
+        # Method closest: when multiple peaks are
+        # found, keep only the closest to the TSS
+        # as the representative one
+        if(method=="closest"){
+            hit <- which.min(subanno$distanceToStart)
             genematrix[gene, allsamples] <- as.numeric(subanno[hit,
                                                             allsamples])
         }
-    }
 
+        # Method farthest: when multiple peaks
+        # are found, keep only the closest to the
+        # TSS as the representative one
+        if(method=="farthest"){
+            hit <- which.max(subanno$distanceToStart)
+            genematrix[gene, allsamples] <- as.numeric(subanno[hit,
+                                                            allsamples])
+        }
 
-    # Method sum: when multiple peaks are
-    # found, sum their contributions
-    if (method == "sum") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == gene, ]
+        # Method sum: when multiple peaks are
+        # found, sum their contributions
+        if (method == "sum") {
             sums <- apply(subanno[, allsamples], 2, sum)
             genematrix[gene, allsamples] <- as.numeric(sums)
         }
-    }
 
-    # Method strongest: when multiple peaks
-    # are found, keep the strongest as the
-    # representative one
-    if (method == "strongest") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == gene, ]
+        # Method strongest: when multiple peaks
+        # are found, keep the strongest as the
+        # representative one
+        if (method == "strongest") {
             sums <- apply(subanno[, allsamples], 1, sum)
             top <- which.max(sums)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
                                                             allsamples])
         }
-    }
 
-    # Method topvar: when multiple peaks are
-    # found, keep the most varying as the
-    # representative one
-    if (method == "topvar") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == gene, ]
+        # Method topvar: when multiple peaks are
+        # found, keep the most varying as the
+        # representative one
+        if (method == "topvar") {
             vars <- apply(subanno[, allsamples], 1, var)
             top <- which.max(vars)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
                                                             allsamples])
         }
-    }
 
-    # Method lowvar: when multiple peaks are
-    # found, keep the least varying as the
-    # representative one
-    if (method == "lowvar") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature == gene, ]
+        # Method lowvar: when multiple peaks are
+        # found, keep the least varying as the
+        # representative one
+        if (method == "lowvar") {
             vars <- apply(subanno[, allsamples], 1, var)
             top <- which.min(vars)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
                                                             allsamples])
         }
-    }
 
+    }
     return(genematrix)
 }
 
@@ -581,5 +570,3 @@ vulcan.pathways <- function(vobj, pathways,
         return(rea.pathways)
     }
 }
-
-
