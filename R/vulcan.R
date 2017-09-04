@@ -182,9 +182,8 @@ vulcan.annotate <- function(vobj, lborder = -10000,
     genesone <- names(peakspergene)[peakspergene ==
                                         1]
     for (gene in genesone) {
-        rawcounts[gene, allsamples] <-
-            as.numeric(dfanno[dfanno$feature ==
-                                gene, allsamples])
+        rawcounts[gene, allsamples] <- as.numeric(dfanno[dfanno$feature ==
+                                                            gene, allsamples])
     }
 
     # Other methods: they deal with cases
@@ -229,9 +228,10 @@ vulcan.annotate <- function(vobj, lborder = -10000,
 
 
     ### Fix data types as needed
-    rawcounts <- matrix(as.numeric(rawcounts), nrow(rawcounts))
-    rpkms <- matrix(as.numeric(rpkms), nrow(rpkms))
-
+    rawcounts<-matrix(as.numeric(rawcounts),nrow=nrow(rawcounts),
+                    dimnames=dimnames(rawcounts))
+    rpkms<-matrix(as.numeric(rpkms),nrow=nrow(rpkms),
+                dimnames=dimnames(rpkms))
 
     # Return object
     vobj$rawcounts <- rawcounts
@@ -255,39 +255,50 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
         stop("unsupported method ", method)
     }
 
+    # Method closest: when multiple peaks are
+    # found, keep only the closest to the TSS
+    # as the representative one
+
+    # Method farthest: when multiple peaks
+    # are found, keep only the closest to the
+    # TSS as the representative one
+
+    # Method sum: when multiple peaks are
+    # found, sum their contributions
+
+    # Method strongest: when multiple peaks
+    # are found, keep the strongest as the
+    # representative one
+
+    # Method topvar: when multiple peaks are
+    # found, keep the most varying as the
+    # representative one
+
+    # Method lowvar: when multiple peaks are
+    # found, keep the least varying as the
+    # representative one
+
 
     for (gene in genesmore) {
         subanno <- dfanno[dfanno$feature == gene, ]
 
-
-        # Method closest: when multiple peaks are
-        # found, keep only the closest to the TSS
-        # as the representative one
-        if(method=="closest"){
-            hit <- which.min(subanno$distanceToStart)
-            genematrix[gene, allsamples] <- as.numeric(subanno[hit,
+        if (method == "closest") {
+            closest <- which.min(subanno$distanceToStart)
+            genematrix[gene, allsamples] <- as.numeric(subanno[closest,
                                                             allsamples])
         }
 
-        # Method farthest: when multiple peaks
-        # are found, keep only the closest to the
-        # TSS as the representative one
-        if(method=="farthest"){
-            hit <- which.max(subanno$distanceToStart)
-            genematrix[gene, allsamples] <- as.numeric(subanno[hit,
+        if (method == "farthest") {
+            farthest <- which.max(subanno$distanceToStart)
+            genematrix[gene, allsamples] <- as.numeric(subanno[farthest,
                                                             allsamples])
         }
 
-        # Method sum: when multiple peaks are
-        # found, sum their contributions
         if (method == "sum") {
             sums <- apply(subanno[, allsamples], 2, sum)
             genematrix[gene, allsamples] <- as.numeric(sums)
         }
 
-        # Method strongest: when multiple peaks
-        # are found, keep the strongest as the
-        # representative one
         if (method == "strongest") {
             sums <- apply(subanno[, allsamples], 1, sum)
             top <- which.max(sums)
@@ -295,9 +306,6 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                                                             allsamples])
         }
 
-        # Method topvar: when multiple peaks are
-        # found, keep the most varying as the
-        # representative one
         if (method == "topvar") {
             vars <- apply(subanno[, allsamples], 1, var)
             top <- which.max(vars)
@@ -305,9 +313,6 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
                                                             allsamples])
         }
 
-        # Method lowvar: when multiple peaks are
-        # found, keep the least varying as the
-        # representative one
         if (method == "lowvar") {
             vars <- apply(subanno[, allsamples], 1, var)
             top <- which.min(vars)
@@ -570,3 +575,4 @@ vulcan.pathways <- function(vobj, pathways,
         return(rea.pathways)
     }
 }
+
