@@ -29,3 +29,19 @@ cat("import(csaw)\n",file="NAMESPACE",append=TRUE)
 cat("import(wordcloud)\n",file="NAMESPACE",append=TRUE)
 #cat("import(caTools)\n",file="NAMESPACE",append=TRUE)
 
+
+cat("importFrom('GenomicRanges', 'GRanges'))",file="NAMESPACE",append=TRUE)
+cat("importFrom('S4Vectors', 'Rle'))",file="NAMESPACE",append=TRUE)
+
+
+
+cat("importFrom('graphics', 'abline', 'grid', 'layout', 'legend', 'lines', 'par', 'plot', 'points', 'rect', 'text')\n",
+    file="NAMESPACE",append=TRUE)
+cat("importFrom('stats', 'ks.test', 'pchisq', 'pnorm', 'pt', 'qnorm', 'qt', 'rnorm', 'setNames')\n",
+    file="NAMESPACE",append=TRUE)
+cat("importFrom('utils', 'read.csv', 'setTxtProgressBar', 'txtProgressBar')\n",
+    file="NAMESPACE",append=TRUE)
+
+
+
+

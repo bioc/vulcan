@@ -64,7 +64,6 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
         rawmat[, names(listcounts)[i]] <- as.numeric(listcounts[[i]]$RPKM)
     }
     peakrpkms <- rawmat
-    rm(rawmat)
 
     # Prepare Count matrix
     first <- listcounts[[1]]
@@ -79,7 +78,6 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
         rawmat[, names(listcounts)[i]] <- as.integer(listcounts[[i]]$Reads)
     }
     peakcounts <- rawmat
-    rm(rawmat)
 
 
     # Create an annotation structure
@@ -230,15 +228,9 @@ vulcan.annotate <- function(vobj, lborder = -10000,
 
 
     ### Fix data types as needed
-    for (j in seq_len(ncol(rawcounts))) {
-        rawcounts[, j] <- as.numeric(rawcounts[, j])
-    }
-    rawcounts <- as.matrix(rawcounts)
+    rawcounts <- matrix(as.numeric(rawcounts), nrow(rawcounts))
+    rpkms <- matrix(as.numeric(rpkms), nrow(rpkms))
 
-    for (j in seq_len(ncol(rpkms))) {
-        rpkms[, j] <- as.numeric(rpkms[, j])
-    }
-    rpkms <- as.matrix(rpkms)
 
     # Return object
     vobj$rawcounts <- rawcounts
@@ -262,27 +254,25 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
         stop("unsupported method ", method)
     }
 
+
     # Method closest: when multiple peaks are
     # found, keep only the closest to the TSS
     # as the representative one
-    if (method == "closest") {
-        for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature ==
-                                gene, ]
-            closest <- which.min(subanno$distanceToStart)
-            genematrix[gene, allsamples] <- as.numeric(subanno[closest,
-                                                            allsamples])
-        }
-    }
 
     # Method farthest: when multiple peaks
     # are found, keep only the closest to the
     # TSS as the representative one
-    if (method == "farthest") {
+
+    if (method == "closest" | method == "farthest") {
         for (gene in genesmore) {
             subanno <- dfanno[dfanno$feature == gene, ]
-            farthest <- which.max(subanno$distanceToStart)
-            genematrix[gene, allsamples] <- as.numeric(subanno[farthest,
+            if(method=="closest"){
+                hit <- which.min(subanno$distanceToStart)
+            }
+            if(method=="farthest"){
+                hit <- which.max(subanno$distanceToStart)
+            }
+            genematrix[gene, allsamples] <- as.numeric(subanno[hit,
                                                             allsamples])
         }
     }
@@ -316,8 +306,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
     # representative one
     if (method == "topvar") {
         for (gene in genesmore) {
-            subanno <- dfanno[dfanno$feature ==
-                                gene, ]
+            subanno <- dfanno[dfanno$feature == gene, ]
             vars <- apply(subanno[, allsamples], 1, var)
             top <- which.max(vars)
             genematrix[gene, allsamples] <- as.numeric(subanno[top,
