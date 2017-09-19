@@ -490,6 +490,8 @@ vulcan <- function(vobj, network, contrast, annotation = NULL,
 #' pathway
 #' @param method either 'REA' for Rank Enrichment Analysis or 'GSEA' for Gene
 #' Set Enrichment Analysis
+#' @param np numeric, only for GSEA, the number of permutations to build the
+#' null distribution. Default is 1000
 #' @return if method=='GSEA', a named vector, with pathway names as names,
 #' and the normalized enrichment score of either the GSEA as value.
 #' If method=='REA', a matrix, with pathway names as rows and specific
@@ -515,7 +517,8 @@ vulcan <- function(vobj, network, contrast, annotation = NULL,
 #' results_rea<-vulcan.pathways(vobj,pathways,contrast=c('all'),method='REA')
 #' @export
 vulcan.pathways <- function(vobj, pathways,
-                            contrast = NULL, method = c("GSEA", "REA")) {
+                            contrast = NULL,
+                            method = c("GSEA", "REA"), np=1000) {
     normalized <- vobj$normalized
     samples <- vobj$samples
     allgenes <- unique(unlist(pathways))
@@ -527,7 +530,6 @@ vulcan.pathways <- function(vobj, pathways,
         b <- samples[[contrast[2]]]
 
         # Prepare signature
-        set.seed(1)
         signature <- rowTtest(normalized[, a], normalized[, b])$statistic
         if (is.matrix(signature)) {
             signature <- signature[, 1]
@@ -550,7 +552,7 @@ vulcan.pathways <- function(vobj, pathways,
                 p <- pathways[[pname]]
                 obj <- gsea(reflist = signature,
                             set = p, method = "pareto",
-                            np = 100)
+                            np = np)
                 gsea.pathways[pname] <- obj$nes
                 setTxtProgressBar(pb, i <- i + 1)
             }
@@ -575,4 +577,3 @@ vulcan.pathways <- function(vobj, pathways,
         return(rea.pathways)
     }
 }
-

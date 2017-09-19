@@ -21,82 +21,74 @@
 #' obj<-gsea(reflist,set,method='pareto')
 #' obj$p.value
 #' @export
-gsea <- function(reflist, set, method = c("permutation",
-                                        "pareto"),
-                np = 1000, w = 1, gsea_null = NULL) {
+gsea <- function(reflist,
+                set,
+                method=c("permutation","pareto"),
+                np=1000,
+                w=1,
+                gsea_null=NULL) {
 
-    # Get elements in set that are in the ref
-    # list
+
+    # Get elements in set that are in the ref list
     set <- intersect(names(reflist), set)
 
-    # Sort the reference list Get the list
-    # order, from higher (1) to smaller (n)
-    ix <- order(reflist, decreasing = TRUE)
-    reflist <- reflist[ix]  # Reorder the reference list
+    # Sort the reference list
+    # Get the list order, from higher (1)to smaller (n)
+    ix <- order(reflist, decreasing=TRUE)
+    reflist <- reflist[ix] # Reorder the reference list
 
     # Initialize variables for running sum
     es <- 0
     nes <- 0
     p.value <- 1
 
-    # Identify indexes of set within the
-    # sorted reference list
+    # Identify indexes of set within the sorted reference list
     inSet <- rep(0, length(reflist))
     inSet[which(names(reflist) %in% set)] <- 1
 
-    ### Compute Enrichment Score Compute
-    ### running sum for hits
-    hits <- abs(reflist * inSet)  # Get the values for the elements in the set
-    hits <- hits^w  # Raise this score to the power of w
-    score_hit <- cumsum(hits)  # Cumulative sum of hits' scores
-    # The cumulative sum is divided by the
-    # final sum value
-    score_hit <- score_hit/score_hit[length(score_hit)]
+    ### Compute Enrichment Score
+    # Compute running sum for hits
+    hits<-abs(reflist*inSet) # Get the values for the elements in the set
+    hits<-hits^w # Raise this score to the power of w
+    score_hit <- cumsum(hits) # Cumulative sum of hits' scores
+    # The cumulative sum is divided by the final  sum value
+    score_hit <- score_hit / score_hit[length(score_hit)]
 
     # Compute running sum for non-hits
-    score_miss <- cumsum(1 - inSet)
+    score_miss <- cumsum(1-inSet)
     score_miss <- score_miss/score_miss[length(score_miss)]
 
-    # The Running Score is the difference
-    # between the two scores! Hits - nonhits
+    # The Running Score is the difference between the two scores! Hits - nonhits
     running_score <- score_hit - score_miss
 
-    # Safety measure, in the case the random
-    # genes have all a weight of 0
-    if (all(is.na(running_score))) {
-        running_score <- rep(0, length(running_score))
+    # Safety measure, in the case the random genes have all a weight of 0
+    if(all(is.na(running_score))){
+        running_score<-rep(0,length(running_score))
     }
 
-    # The ES is actually the minimum or
-    # maximum Running Scores
-    if (abs(max(running_score)) > abs(min(running_score))) {
-        es <- max(running_score)
+    # The ES is actually the minimum or maximum Running Scores
+    if(abs(max(running_score))>abs(min(running_score))){
+        es<-max(running_score)
     } else {
-        es <- min(running_score)
+        es<-min(running_score)
     }
 
 
-    ### Identify leading edge Create a vector
-    ### of 0s long as the reference list
+    ### Identify leading edge
+    # Create a vector of 0s long as the reference list
     ledge_indeces <- rep(0, length(running_score))
     # Case 1: negative ES
-    if (es < 0) {
-        peak <- which(running_score == min(running_score))[1]
-        ledge_indeces[peak:length(ledge_indeces)] <- 1  # Leading edge is
-        # stuff AFTER the peak point (ES is
-        # negative)
-        ledge_indeces <- which(ledge_indeces ==
-                                1)
+    if (es<0){
+        peak <- which(running_score==min(running_score))[1]
+        # Leading edge is stuff AFTER the peak point (ES is negative)
+        ledge_indeces[peak:length(ledge_indeces)] <- 1
+        ledge_indeces <- which(ledge_indeces == 1)
         ledge_names <- names(reflist[ledge_indeces])
-    } else {
-        # Case 2: positive ES Define the peak
-        # point
-        peak <- which(running_score == max(running_score))
-        # Leading edge is stuff BEFORE the peak
-        # point (ES is positive)
+    } else{ # Case 2: positive ES
+        peak <- which(running_score==max(running_score)) # Define the peak point
+        # Leading edge is stuff BEFORE the peak point (ES is positive)
         ledge_indeces[1:peak] <- 1
-        ledge_indeces <- which(ledge_indeces ==
-                                1)
+        ledge_indeces <- which(ledge_indeces == 1)
         ledge_names <- names(reflist[ledge_indeces])
     }
 
@@ -105,61 +97,57 @@ gsea <- function(reflist, set, method = c("permutation",
 
 
     ### Compute p-value by permutation
-    if (is.null(gsea_null)) {
-        null_es <- null_gsea(set = set, reflist = reflist,
-                            np = np, w = w)
-    } else {
+    if(is.null(gsea_null)){
+        null_es<-null_gsea(set=set,reflist=reflist,np=np,w=w)
+    } else{
         ### If a null list is provided, use it
-        if (class(gsea_null) == "gsea_nullist") {
-            null_es <- gsea_null[as.character(length(set))][[1]]
-        } else {
-            null_es <- gsea_null
+        if(class(gsea_null)=="gsea_nullist"){
+            null_es<-gsea_null[as.character(length(set))][[1]]
+        }else{
+            null_es<-gsea_null
         }
     }
-    # The empirical p-value will be
-    # calculated
-    if (es < 0) {
-        p.value <- sum(null_es <= es)/length(null_es)
+    if (es<0){
+        p.value <- sum(null_es<=es)/length(null_es)
     } else {
-        p.value <- sum(null_es >= es)/length(null_es)
+        p.value <- sum(null_es>=es)/length(null_es)
     }
-    # }
+    #    }
 
 
-    # If we are in the tail, the p-value can
-    # be calculated in two ways
-    if (is.na(p.value) || p.value < 0.05) {
-        if (p.value == 0) {
+    # If we are in the tail, the p-value can be calculated in two ways
+    if(is.na(p.value) || p.value<0.05) {
+        if(p.value==0){
             p.value <- 1/np
         }
-        if (method == "pareto") {
-            # Extract the absolute null ESs above the
-            # 95th percentile
-            q95 <- as.numeric(quantile(abs(null_es),
-                                    0.95))
-            fit <- pareto.fit(abs(null_es),
-                            threshold = q95)
-            newp.value <- ppareto(abs(es),
-                                threshold = q95, exponent = fit$exponent,
-                                lower.tail = FALSE)/20
-            # Brutal fix, if Pareto cannot fix small
-            # ESs, take the permutation p-value
-            if (is.na(newp.value)) {
-                newp.value <- p.value
+        if (method=="pareto"){
+            # Extract the absolute null ESs above the 95th percentile
+            q95<-as.numeric(quantile(abs(null_es),0.95))
+            fit<-pareto.fit(abs(null_es),threshold=q95)
+            newp.value<-ppareto(abs(es), threshold=q95,
+                                exponent=fit$exponent, lower.tail=FALSE)/20
+        # If Pareto cannot infer small ESs take the permutation p-value
+            if(is.na(newp.value)){
+                newp.value<-p.value
             }
-            p.value <- newp.value
+            p.value<-newp.value
         }
     }
 
-    # Calculate the normalized enrichment
-    # score
-    nes <- p2z(p.value) * sign(es)
+    # Calculate the normalized enrichment score
+    nes<-p2z(p.value)*sign(es)
 
-    gsea.obj <- list(es = es, nes = nes,
-                    p.value = p.value, ledge = ledge_names,
-                    running_score = running_score, set = set,
-                    reflist = reflist, inSet = inSet)
-    class(gsea.obj) <- "gsea"
+    gsea.obj<-list(
+        es=es,
+        nes=nes,
+        p.value=p.value,
+        ledge=ledge_names,
+        running_score=running_score,
+        set=set,
+        reflist=reflist,
+        inSet=inSet
+    )
+    class(gsea.obj)<-"gsea"
     return(gsea.obj)
 }
 
@@ -181,47 +169,36 @@ gsea <- function(reflist, set, method = c("permutation",
 #' nulldist<-null_gsea(set,reflist)
 #' nulldist[1:10]
 #' @export
-null_gsea <- function(set, reflist, w = 1,
-                    np = 1000) {
-    gsea_null <- sapply(seq_len(np), function(i) {
-        # Identify indexes of set within the
-        # sorted reference list
+null_gsea<-function(set,reflist,w=1,np=1000){
+    gsea_null <- rep(0, np)
+    gsea_null <- sapply(1:np, function(i) {
+        # Identify indexes of set within the sorted reference list
         inSet <- rep(0, length(reflist))
         inSet[which(names(reflist) %in% set)] <- 1
 
-        # By sampling the order of the set
-        # elements, we get the real permutation
-        if (length(inSet == 0)) {
-            return(0)
-        } else {
-            null_inSet <- inSet[sample(1:length(inSet))]
-        }
+        # By sampling the order of the set elements, we get the real permutation
+        null_inSet <- inSet[sample(1:length(inSet))]
 
-        # Same as before, cumulative sums of hits
-        # and nonhits
-        null_hit <- abs(reflist * null_inSet)
-        null_hit <- null_hit^w
+        # Same as before, cumulative sums of hits and nonhits
+        null_hit<-abs(reflist*null_inSet)
+        null_hit<-null_hit^w
         null_hit <- cumsum(null_hit)
         null_hit <- null_hit/null_hit[length(null_hit)]
-        null_miss <- cumsum(1 - null_inSet)
+        null_miss <- cumsum(1-null_inSet)
         null_miss <- null_miss/null_miss[length(null_miss)]
-        # And dependending on the cumulative
-        # sums, null running sum and null
-        # enrichment score
-        null_running_score <- null_hit -
-            null_miss
+        # And dependending on the cumulative sums, null running sum and
+        # null enrichment score
+        null_running_score <- null_hit - null_miss
 
-        # The ES is just he maximum or the
-        # minimum
-        if (abs(max(null_running_score)) >
-            abs(min(null_running_score))) {
-            null_es <- max(null_running_score)
+        # The ES is just he maximum or the minimum
+        if(abs(max(null_running_score))>abs(min(null_running_score))){
+            null_es<-max(null_running_score)
         } else {
-            null_es <- min(null_running_score)
+            null_es<-min(null_running_score)
         }
         return(null_es)
     })
-    class(gsea_null) <- "gsea_null"
+    class(gsea_null)<-"gsea_null"
     return(gsea_null)
 }
 #' Plot GSEA results

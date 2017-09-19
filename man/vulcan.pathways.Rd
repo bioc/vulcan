@@ -4,7 +4,8 @@
 \alias{vulcan.pathways}
 \title{Function to calculate pathway enrichment over a ChIP-Seq profile}
 \usage{
-vulcan.pathways(vobj, pathways, contrast = NULL, method = c("GSEA", "REA"))
+vulcan.pathways(vobj, pathways, contrast = NULL, method = c("GSEA", "REA"),
+  np = 1000)
 }
 \arguments{
 \item{vobj}{a list, the output of the \code{'vulcan.annotate'} function}
@@ -19,6 +20,9 @@ mean of the dataset.}
 
 \item{method}{either 'REA' for Rank Enrichment Analysis or 'GSEA' for Gene
 Set Enrichment Analysis}
+
+\item{np}{numeric, only for GSEA, the number of permutations to build the
+null distribution. Default is 1000}
 }
 \value{
 if method=='GSEA', a named vector, with pathway names as names,
