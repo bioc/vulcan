@@ -8,6 +8,8 @@ git push -u origin master
 
 git config credential.helper store
 git config --global credential.helper 'cache --timeout 7200'
+git config --global user.email "federico.giorgi@gmail.com"
+git config --global user.name "Federico Giorgi"
 
 
 cd /Users/giorgi01/Dropbox/rstudio/vulcanpackage/vulcan

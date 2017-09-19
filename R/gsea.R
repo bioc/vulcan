@@ -18,7 +18,7 @@
 #' @examples
 #' reflist<-setNames(-sort(rnorm(1000)),paste0('gene',1:1000))
 #' set<-paste0('gene',sample(1:200,50))
-#' obj<-gsea(reflist,set,method='pareto')
+#' obj<-gsea(reflist,set,method='pareto',np=1000)
 #' obj$p.value
 #' @export
 gsea <- function(reflist,
