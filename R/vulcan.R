@@ -16,13 +16,14 @@
 #' columns}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
+#' \dontrun{
 #' @examples
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
 #' vulcandata::vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
-#'
+#' }
 #' @export
 vulcan.import <- function(sheetfile, intervals = NULL) {
     # Check the dataset
@@ -137,6 +138,7 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' columns. The RPKMs are associated to the promoter region of the gene}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
+#' \dontrun{
 #' @examples
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
@@ -144,6 +146,7 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
+#' }
 #' @export
 vulcan.annotate <- function(vobj, lborder = -10000,
                             rborder = 10000, method = c("closest",
@@ -348,7 +351,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
 #' region of the gene}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
-#'
+#' \dontrun{
 #' @examples
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
@@ -357,6 +360,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
 #' unlink(vfile)
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 #' vobj<-vulcan.normalize(vobj)
+#' }
 #' @export
 vulcan.normalize <- function(vobj) {
     # Extract raw counts from object

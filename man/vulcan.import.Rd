@@ -13,25 +13,7 @@ and BAM location}
 \item{intervals}{size of the peaks. If NULL (default) it is inferred from
 the average fragment length observed in the dataset}
 }
-\value{
-A list of components:
-\describe{
-\item{peakcounts}{A matrix of raw peak counts, peaks as rows, samples as
-columns}
-\item{peakrpkms}{A matrix of peak RPKMs, peaks as rows, samples as
-columns}
-\item{samples}{A vector of sample names and conditions}
-}
-}
 \description{
 This function coalesces and annotates a set of BAM files into peak-centered
 data
-}
-\examples{
-library(vulcandata)
-vfile<-'deleteme.csv'
-vulcandata::vulcansheet(vfile)
-vobj<-vulcan.import(vfile)
-unlink(vfile)
-
 }
