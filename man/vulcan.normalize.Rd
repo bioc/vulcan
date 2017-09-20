@@ -9,6 +9,35 @@ vulcan.normalize(vobj)
 \arguments{
 \item{vobj}{a list, the output of the \code{'vulcan.annotate'} function}
 }
+\value{
+A list of components:
+\describe{
+\item{peakcounts}{A matrix of raw peak counts, peaks as rows, samples as
+columns}
+\item{peakrpkms}{A matrix of peak RPKMs, peaks as rows, samples as
+columns}
+\item{rawcounts}{A matrix of raw gene counts, genes as rows, samples as
+columns. The counts are associated to the promoter region of the gene}
+\item{rpkms}{A matrix of RPKMs, genes as rows, samples as
+columns. The RPKMs are associated to the promoter region of the gene}
+\item{normalized}{A matrix of gene abundances normalized by
+Variance-Stabilizing Transformation (VST), genes as rows, samples as
+columns. The abundances are associated to the promoter
+region of the gene}
+\item{samples}{A vector of sample names and conditions}
+}
+}
 \description{
 This function normalizes gene-centered ChIP-Seq data using VST
+}
+\examples{
+\dontrun{
+library(vulcandata)
+vfile<-'deleteme.csv'
+vulcandata::vulcansheet(vfile)
+vobj<-vulcan.import(vfile)
+unlink(vfile)
+vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
+vobj<-vulcan.normalize(vobj)
+}
 }

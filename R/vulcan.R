@@ -16,8 +16,8 @@
 #' columns}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
-#' \dontrun{
 #' @examples
+#' \dontrun{
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
 #' vulcandata::vulcansheet(vfile)
@@ -138,8 +138,8 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' columns. The RPKMs are associated to the promoter region of the gene}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
-#' \dontrun{
 #' @examples
+#' \dontrun{
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
 #' vulcandata::vulcansheet(vfile)
@@ -351,8 +351,8 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
 #' region of the gene}
 #' \item{samples}{A vector of sample names and conditions}
 #' }
-#' \dontrun{
 #' @examples
+#' \dontrun{
 #' library(vulcandata)
 #' vfile<-'deleteme.csv'
 #' vulcandata::vulcansheet(vfile)

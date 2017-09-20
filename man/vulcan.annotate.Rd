@@ -36,9 +36,33 @@ representative one}
 representative one}
 }}
 }
+\value{
+A list of components:
+\describe{
+\item{peakcounts}{A matrix of raw peak counts, peaks as rows, samples as
+columns}
+\item{peakrpkms}{A matrix of peak RPKMs, peaks as rows, samples as
+columns}
+\item{rawcounts}{A matrix of raw gene counts, genes as rows, samples as
+columns. The counts are associated to the promoter region of the gene}
+\item{rpkms}{A matrix of RPKMs, genes as rows, samples as
+columns. The RPKMs are associated to the promoter region of the gene}
+\item{samples}{A vector of sample names and conditions}
+}
+}
 \description{
 This function coalesces and annotates a set of BAM files into peak-centered
 data. It implements the ChIPPeakANno methods, with specific choices dealing
 with defining the genomic area around the promoter and which peaks to
 include.
+}
+\examples{
+\dontrun{
+library(vulcandata)
+vfile<-'deleteme.csv'
+vulcandata::vulcansheet(vfile)
+vobj<-vulcan.import(vfile)
+unlink(vfile)
+vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
+}
 }
