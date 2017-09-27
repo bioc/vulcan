@@ -57,12 +57,7 @@ with defining the genomic area around the promoter and which peaks to
 include.
 }
 \examples{
-\dontrun{
 library(vulcandata)
-vfile<-'deleteme.csv'
-vulcandata::vulcansheet(vfile)
-vobj<-vulcan.import(vfile)
-unlink(vfile)
+vobj<-vulcandata::vulcanexample()
 vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
-}
 }

@@ -33,10 +33,7 @@ This function normalizes gene-centered ChIP-Seq data using VST
 \examples{
 \dontrun{
 library(vulcandata)
-vfile<-'deleteme.csv'
-vulcandata::vulcansheet(vfile)
-vobj<-vulcan.import(vfile)
-unlink(vfile)
+vobj<-vulcandata::vulcanexample()
 vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 vobj<-vulcan.normalize(vobj)
 }

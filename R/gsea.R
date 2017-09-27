@@ -211,7 +211,6 @@ null_gsea<-function(set,reflist,w=1,np=1000){
 #' @param colBarcode The color of the barcode
 #' @param plotNames Logical. Should the set names be plotted?
 #' @param title String to be plotted above the Running Enrichment Score
-#' @param correctEntrez Logical. Should the ids converted to gene symbols?
 #' @param bottomYlabel String for the label
 #' @param bottomYtitle String for the title of the bottom part of the plot
 #' @param ext_nes Provide a NES from an external calculation
@@ -228,7 +227,6 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
                                             "blue"),
                     plotNames = FALSE, colBarcode = "black",
                     title = "Running Enrichment Score",
-                    correctEntrez = FALSE,
                     bottomYtitle = "List Values",
                     bottomYlabel = "Signature values",
                     ext_nes = NULL, omit_middle = FALSE) {
@@ -241,12 +239,6 @@ plot_gsea <- function(gsea.obj, twoColors = c("red",
     set <- gsea.obj$set
     reflist <- gsea.obj$reflist
     inSet <- gsea.obj$inSet
-
-    # Convert to gene symbols
-    if (correctEntrez) {
-        set <- e2s(set)
-        names(reflist) <- e2s(names(reflist))
-    }
 
     # Define plot borders? Who wrote the
     # original code has a non-euclidean mind

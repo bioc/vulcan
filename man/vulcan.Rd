@@ -49,12 +49,9 @@ ChIP-Seq derived signature
 }
 \examples{
 library(vulcandata)
-# Generate an annotation file from the dummy ChIP-Seq dataset
-vfile<-'deleteme.csv'
-vulcandata::vulcansheet(vfile)
-# Import BAM and BED information into a list object
-vobj<-vulcan.import(vfile)
-unlink(vfile)
+# Get an example vulcan object (generated with vulcan.import() using the
+# dummy dataset contained in the \\textit{vulcandata} package)
+vobj<-vulcandata::vulcanexample()
 # Annotate peaks to gene names
 vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 # Normalize data for VULCAN analysis

@@ -17,20 +17,22 @@
 #' \item{samples}{A vector of sample names and conditions}
 #' }
 #' @examples
-#' \dontrun{
 #' library(vulcandata)
-#' vfile<-'deleteme.csv'
+#' # Generate an annotation file from the dummy ChIP-Seq dataset
+#' vfile<-tempfile()
 #' vulcandata::vulcansheet(vfile)
+#' # Import BAM and BED information into a list object
 #' vobj<-vulcan.import(vfile)
+#' # This vobj is identical to the object returned by
+#' # vulcandata::vulcanexample()
 #' unlink(vfile)
-#' }
 #' @export
 vulcan.import <- function(sheetfile, intervals = NULL) {
     # Check the dataset
     sheet <- read.csv(sheetfile, as.is = TRUE)
 
     # Generate a DiffBind object
-    dbobj <- dba(sampleSheet = sheetfile)
+    dbobj <- DiffBind::dba(sampleSheet = sheetfile)
     message("Sheet loaded. You have ", nrow(sheet),
             " samples and ", length(unique(sheet$Condition)),
             " conditions")
@@ -46,7 +48,7 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
     }
 
     # Count reads in binding sites intervals
-    dbcounts <- dba.count(dbobj, summits = intervals)
+    dbcounts <- DiffBind::dba.count(dbobj, summits = intervals)
 
     # Extract counts from the dbacount object
     listcounts <- dbcounts$peaks
@@ -139,14 +141,9 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' \item{samples}{A vector of sample names and conditions}
 #' }
 #' @examples
-#' \dontrun{
 #' library(vulcandata)
-#' vfile<-'deleteme.csv'
-#' vulcandata::vulcansheet(vfile)
-#' vobj<-vulcan.import(vfile)
-#' unlink(vfile)
+#' vobj<-vulcandata::vulcanexample()
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
-#' }
 #' @export
 vulcan.annotate <- function(vobj, lborder = -10000,
                             rborder = 10000, method = c("closest",
@@ -354,10 +351,7 @@ dist_calc<-function(method,dfanno,genematrix,genesmore,allsamples){
 #' @examples
 #' \dontrun{
 #' library(vulcandata)
-#' vfile<-'deleteme.csv'
-#' vulcandata::vulcansheet(vfile)
-#' vobj<-vulcan.import(vfile)
-#' unlink(vfile)
+#' vobj<-vulcandata::vulcanexample()
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 #' vobj<-vulcan.normalize(vobj)
 #' }
@@ -376,11 +370,11 @@ vulcan.normalize <- function(vobj) {
                                         length(samples[[i]])))
     }
     conditions <- factor(conditions)
-    cds <- newCountDataSet(vobj$rawcounts, conditions)
-    cds <- estimateSizeFactors(cds)
-    cds <- estimateDispersions(cds, fitType = "local")
-    vsd <- varianceStabilizingTransformation(cds)
-    normalized <- exprs(vsd)
+    cds <- DESeq::newCountDataSet(vobj$rawcounts, conditions)
+    cds <- DESeq::estimateSizeFactors(cds)
+    cds <- DESeq::estimateDispersions(cds, fitType = "local")
+    vsd <- DESeq::varianceStabilizingTransformation(cds)
+    normalized <- Biobase::exprs(vsd)
     rownames(normalized) <- rownames(rawcounts)
     vobj$normalized <- normalized
     return(vobj)
@@ -423,12 +417,9 @@ vulcan.normalize <- function(vobj) {
 #' }
 #' @examples
 #' library(vulcandata)
-#' # Generate an annotation file from the dummy ChIP-Seq dataset
-#' vfile<-'deleteme.csv'
-#' vulcandata::vulcansheet(vfile)
-#' # Import BAM and BED information into a list object
-#' vobj<-vulcan.import(vfile)
-#' unlink(vfile)
+#' # Get an example vulcan object (generated with vulcan.import() using the
+#' # dummy dataset contained in the \textit{vulcandata} package)
+#' vobj<-vulcandata::vulcanexample()
 #' # Annotate peaks to gene names
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 #' # Normalize data for VULCAN analysis
@@ -462,13 +453,13 @@ vulcan <- function(vobj, network, contrast, annotation = NULL,
     b <- samples[[contrast[2]]]
     # Vulcan msviper implementation
     set.seed(1)
-    signature <- rowTtest(normalized[, a], normalized[, b])$statistic
-    dnull <- ttestNull(normalized[, a], normalized[, b], per = 1000)
+    signature <- viper::rowTtest(normalized[, a], normalized[, b])$statistic
+    dnull <- viper::ttestNull(normalized[, a], normalized[, b], per = 1000)
     msviper <- msviper(signature, network,
                     dnull, minsize = minsize)
     # Annotate
     if (!is.null(annotation)) {
-        msviper <- msviperAnnot(msviper, annotation)
+        msviper <- viper::msviperAnnot(msviper, annotation)
     }
     vobj$msviper <- msviper
     # Specific Master Regulators
@@ -503,7 +494,7 @@ vulcan <- function(vobj, network, contrast, annotation = NULL,
 #' be calculated at the same time)
 #' @examples
 #' library(vulcandata)
-#' vfile<-'deleteme.csv'
+#' vfile<-tempfile()
 #' vulcandata::vulcansheet(vfile)
 #' vobj<-vulcan.import(vfile)
 #' unlink(vfile)
@@ -534,7 +525,7 @@ vulcan.pathways <- function(vobj, pathways,
         b <- samples[[contrast[2]]]
 
         # Prepare signature
-        signature <- rowTtest(normalized[, a], normalized[, b])$statistic
+        signature <- viper::rowTtest(normalized[, a], normalized[, b])$statistic
         if (is.matrix(signature)) {
             signature <- signature[, 1]
         }

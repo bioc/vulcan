@@ -28,11 +28,13 @@ This function coalesces and annotates a set of BAM files into peak-centered
 data
 }
 \examples{
-\dontrun{
 library(vulcandata)
-vfile<-'deleteme.csv'
+# Generate an annotation file from the dummy ChIP-Seq dataset
+vfile<-tempfile()
 vulcandata::vulcansheet(vfile)
+# Import BAM and BED information into a list object
 vobj<-vulcan.import(vfile)
+# This vobj is identical to the object returned by
+# vulcandata::vulcanexample()
 unlink(vfile)
-}
 }

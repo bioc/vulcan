@@ -6,8 +6,8 @@
 \usage{
 plot_gsea(gsea.obj, twoColors = c("red", "blue"), plotNames = FALSE,
   colBarcode = "black", title = "Running Enrichment Score",
-  correctEntrez = FALSE, bottomYtitle = "List Values",
-  bottomYlabel = "Signature values", ext_nes = NULL, omit_middle = FALSE)
+  bottomYtitle = "List Values", bottomYlabel = "Signature values",
+  ext_nes = NULL, omit_middle = FALSE)
 }
 \arguments{
 \item{gsea.obj}{GSEA object produced by the \code{gsea} function}
@@ -20,8 +20,6 @@ enrichment scores}
 \item{colBarcode}{The color of the barcode}
 
 \item{title}{String to be plotted above the Running Enrichment Score}
-
-\item{correctEntrez}{Logical. Should the ids converted to gene symbols?}
 
 \item{bottomYtitle}{String for the title of the bottom part of the plot}
 

@@ -188,7 +188,7 @@ val2col <- function(z, col1 = "navy", col2 = "white",
         breaks <- seq(min(z), max(z), length = nbreaks)
     }
     ncol <- length(breaks) - 1
-    col <- colorpanel(ncol, col1, col2, col3)
+    col <- gplots::colorpanel(ncol, col1, col2, col3)
     CUT <- cut(z, breaks = breaks)
     # assign colors to heights for each point
     colorlevels <- col[match(CUT, levels(CUT))]

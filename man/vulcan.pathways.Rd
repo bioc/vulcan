@@ -37,7 +37,7 @@ Analysis over a ChIP-Seq signature contained in a vulcan package object
 }
 \examples{
 library(vulcandata)
-vfile<-'deleteme.csv'
+vfile<-tempfile()
 vulcandata::vulcansheet(vfile)
 vobj<-vulcan.import(vfile)
 unlink(vfile)
