@@ -87,7 +87,7 @@ library(vulcandata)
 \subsection{Generate a example annotation file}
 <<echo=TRUE, results=hide>>=
 # Generate an annotation file from the dummy ChIP-Seq dataset
-vfile<-"deleteme.csv"
+vfile<-tempfile()
 vulcandata::vulcansheet(vfile)
 @
 

@@ -1,0 +1,32 @@
+# The git config should be here
+D:\Programs\Git\etc\ssh\ssh_config
+# Or here
+C:\Users\feder\.ssh\config
+# I edited it by adding this text:
+Host bioconductor.org
+Hostname bioconductor.org
+User git
+IdentityFile /d/Dropbox/rstudio/github/id_rsa
+PreferredAuthentications publickey
+# I also copied my id_rsa and id_rsa public in C:\Users\feder\.ssh
+
+
+cd /d/Dropbox/rstudio/github/bioconductor
+git clone git@git.bioconductor.org:packages/vulcan
+git clone git@git.bioconductor.org:packages/vulcandata
+
+# edit file, e.g., `vi DESCRIPTION`
+cd /d/Dropbox/rstudio/github/bioconductor/vulcandata
+git commit DESCRIPTION
+git push
+
+# Edit and add a file
+cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+git add inst/scripts/maintain.txt
+git commit vignettes/vulcan.Rnw inst/scripts/maintain.txt
+
+# If the repository is already cloned, the work flow is to make sure that you are on the ‘master’ branch, pull any changes, then introduce your edits.
+cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+git checkout master
+git pull
+## add, edit, commit, and push as above
