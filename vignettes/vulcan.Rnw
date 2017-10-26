@@ -94,7 +94,8 @@ vulcandata::vulcansheet(vfile)
 \subsection{Import ChIP-Seq information}
 <<echo=TRUE, results=hide>>=
 # Import BAM and BED information into a list object
-vobj<-vulcan.import(vfile)
+# vobj<-vulcan.import(vfile)
+vobj<-vulcandata::vulcanexample()
 unlink(vfile)
 @
 
