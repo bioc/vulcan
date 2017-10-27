@@ -1,3 +1,8 @@
+### USEFUL LINKS!
+https://www.bioconductor.org/developers/how-to/git/
+http://master.bioconductor.org/developers/how-to/git/faq/
+
+
 # The git config should be here
 D:\Programs\Git\etc\ssh\ssh_config
 # Or here
@@ -24,6 +29,7 @@ git push
 cd /d/Dropbox/rstudio/github/bioconductor/vulcan
 git add inst/scripts/maintain.txt
 git commit vignettes/vulcan.Rnw inst/scripts/maintain.txt
+git push
 
 # If the repository is already cloned, the work flow is to make sure that you are on the ‘master’ branch, pull any changes, then introduce your edits.
 cd /d/Dropbox/rstudio/github/bioconductor/vulcan
