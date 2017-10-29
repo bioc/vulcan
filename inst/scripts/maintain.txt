@@ -41,7 +41,7 @@ git pull
 
 # Just commit and push everything
 cd /d/Dropbox/rstudio/github/bioconductor/vulcan
-git commit . -m 'Update'
+git commit * -m 'Update'
 git push
 
 
