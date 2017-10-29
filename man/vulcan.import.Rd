@@ -33,7 +33,7 @@ library(vulcandata)
 vfile<-tempfile()
 vulcandata::vulcansheet(vfile)
 # Import BAM and BED information into a list object
-vobj<-vulcan.import(vfile)
+# vobj<-vulcan.import(vfile)
 # This vobj is identical to the object returned by
 # vulcandata::vulcanexample()
 unlink(vfile)

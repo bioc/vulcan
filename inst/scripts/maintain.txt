@@ -29,6 +29,7 @@ git push
 cd /d/Dropbox/rstudio/github/bioconductor/vulcan
 git add inst/scripts/maintain.txt
 git commit vignettes/vulcan.Rnw inst/scripts/maintain.txt
+git commit . -m 'Update'
 git push
 
 # If the repository is already cloned, the work flow is to make sure that you are on the ‘master’ branch, pull any changes, then introduce your edits.
@@ -36,3 +37,11 @@ cd /d/Dropbox/rstudio/github/bioconductor/vulcan
 git checkout master
 git pull
 ## add, edit, commit, and push as above
+
+
+# Just commit and push everything
+cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+git commit . -m 'Update'
+git push
+
+
