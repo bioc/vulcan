@@ -5,7 +5,8 @@
 \title{Function to annotate peaks for VULCAN analysis}
 \usage{
 vulcan.annotate(vobj, lborder = -10000, rborder = 10000,
-  method = c("closest", "strongest", "sum", "topvar", "farthest", "lowvar"))
+  method = c("closest", "strongest", "sum", "topvar", "farthest", "lowvar"),
+  TxDb = NULL)
 }
 \arguments{
 \item{vobj}{A list of peakcounts, samples and peakrpkms (i.e. the output of
@@ -35,6 +36,9 @@ representative one}
 \item{lowvar}{when multiple peaks are found, keep the least varying as the
 representative one}
 }}
+
+\item{TxDb}{TxDb annotation object containing the knownGene track. If NULL
+(the default), TxDb.Hsapiens.UCSC.hg19.knownGene is loaded}
 }
 \value{
 A list of components:

@@ -128,6 +128,8 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' the Transcription starting site (default: -10000)
 #' @param rborder Boundary for peak annotation (in nucleotides) downstream of
 #' the Transcription starting site (default: 10000)
+#' @param TxDb TxDb annotation object containing the knownGene track. If NULL
+#' (the default), TxDb.Hsapiens.UCSC.hg19.knownGene is loaded
 #' @return A list of components:
 #' \describe{
 #' \item{peakcounts}{A matrix of raw peak counts, peaks as rows, samples as
@@ -151,10 +153,20 @@ vulcan.annotate <- function(vobj, lborder = -10000,
                                                         "sum",
                                                         "topvar",
                                                         "farthest",
-                                                        "lowvar")) {
-    # Annotate (hg19)
-    annotation <- toGRanges(TxDb.Hsapiens.UCSC.hg19.knownGene,
-                            feature = "gene")
+                                                        "lowvar"),
+                            TxDb=NULL) {
+
+    if(!is.null(TxDb)){
+        # Annotate (any genome)
+        annotation <- toGRanges(TxDb,
+                                feature = "gene")
+
+    } else {
+        # Annotate (hg19)
+        annotation <- toGRanges(TxDb.Hsapiens.UCSC.hg19.knownGene,
+                                feature = "gene")
+    }
+
 
     ##### PROCESS RAW COUNTS
     gr <- GRanges(vobj$peakcounts)
