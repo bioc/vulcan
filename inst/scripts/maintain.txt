@@ -13,7 +13,15 @@ Hostname bioconductor.org
 User git
 IdentityFile /d/Dropbox/rstudio/github/id_rsa
 PreferredAuthentications publickey
-# I also copied my id_rsa and id_rsa public in C:\Users\feder\.ssh
+
+# It turns out on the laptop it works if you use this instead:
+# I copied my id_rsa and id_rsa public in C:\Users\feder\.ssh
+# then, in D:\Programs\Git\etc\ssh\ssh_config
+IdentityFile ~/.ssh/id_rsa
+Host bioconductor.org
+Hostname bioconductor.org
+User git
+PreferredAuthentications publickey
 
 
 cd /d/Dropbox/rstudio/github/bioconductor
@@ -40,7 +48,7 @@ git pull
 
 
 # Just commit and push everything
-cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+cd /d/Dropbox/projects/github/bioconductor/vulcan
 # cd /c/Users/fmg2117/Dropbox/rstudio/github/bioconductor/vulcan
 git commit * -m 'Updated TxDb choice in vulcan.annotate()'
 git push
