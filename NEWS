@@ -1,4 +1,4 @@
-new for version 1.0.0
+new for version 1.9.1
 =====================
-* The package now contains dummy ChIPSeq data and a dummy regulon
-* Several fixes in the code indentation
+* The package has been published in Genome Biology. Citation has been updated accordingly
+* Minor bug fixes to allow the tool to run with non-human genomes

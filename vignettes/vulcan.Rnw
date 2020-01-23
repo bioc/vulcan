@@ -30,7 +30,7 @@ strategies from different BioConductor packages: \emph{DESeq} for data
 normalization, \emph{ChIPpeakAnno} and \emph{DiffBind} for annotation and
 definition of ChIP-Seq genomic peaks, \emph{csaw} to define optimal peak width
 and \emph{viper} for applying a regulatory network over a differential binding
-signature.
+signature (Holding et al., 2019).
 Usage of gene regulatory networks to analyze biological systems has witnessed
 an exponential increase in the last decade, due to the ease of obtaining
 genome-wide expression data (Margolin et al., 2005; Giorgi et al., 2013; Castro
@@ -51,8 +51,10 @@ their enrichment in the regulon of potential co-regulatory factors.
 
 %--------
 \section{Citation}
-Giorgi FM, Holding AN \& Markowetz F. Network Dynamics of early ER-alpha
-promoter binding in response to estradiol. Genome Biology (Submitted).
+Holding AN, Giorgi FM, Donnelly A, Cullen AE, Nagarajan S, Selth, LA and
+Markowetz F (2016) VULCAN integrates ChIP-seq with patient-derived
+co-expression networks to identify GRHL2 as a key co-regulator of ERa at
+enhancers in breast cancer. Genome Biology 20(1):91
 %--------
 \section{Installation of \emph{vulcan} package}
 VULCAN requires the R-system (\url{http://www.r-project.org}), and the
@@ -191,6 +193,10 @@ axis(2,at=pretty(a),labels=kmg)
 
 %-----------
 \begin{thebibliography}{99}
+\bibitem{Holding2019} Holding, A.N., Giorgi, F.M., Donnelly, A., Cullen, A.E.,
+Nagarajan, S., Selth, L.A.,and Markowetz, F. (2016). VULCAN integrates ChIP-seq
+with patient-derived co-expression networks to identify GRHL2 as a key
+co-regulator of ERa at enhancers in breast cancer. Genome Biology 20(1):91
 \bibitem{Alvarez2013} Alvarez, M.J., Shen, Y., Giorgi, F.M., Lachmann, A.,
 Ding, B.B., Ye, B.H., \& Califano, A. (2016). Functional characterization
 of somatic mutations in cancer using network-based inference of protein
