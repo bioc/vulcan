@@ -50,7 +50,7 @@ git pull
 # Just commit and push everything
 cd /d/Dropbox/projects/github/bioconductor/vulcan
 # cd /c/Users/fmg2117/Dropbox/rstudio/github/bioconductor/vulcan
-git commit * -m 'Updated TxDb choice in vulcan.annotate()'
+git commit * -m 'Updated reference'
 git push
 
 
