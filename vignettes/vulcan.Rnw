@@ -11,10 +11,11 @@
 \title{Using vulcan, a package that combines regulatory networks and ChIP-Seq
 data to identify chromatin-binding cofactors}
 \author[1]{Federico M. Giorgi}
-\author[1]{Andrew N. Holding}
-\author[1]{Florian Markowetz}
-\affil[1]{Cancer Research UK, Cambridge Institute, Robinson Way, Cambridge
-United Kingdom}
+\author[2]{Andrew N. Holding}
+\author[3]{Florian Markowetz}
+\affil[1]{Department of Pharmacy and Biotechnology, University of Bologna, Italy}
+\affil[2]{Department of Biology, University of York, United Kingdom}
+\affil[3]{Cancer Research UK, Cambridge Institute, United Kingdom}
 \date{\today}
 
 \begin{document}
