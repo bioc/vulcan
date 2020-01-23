@@ -64,9 +64,10 @@ set.seed(1)
 @
 
 <<echo=TRUE, results=hide, eval=FALSE>>=
-source("http://bioconductor.org/biocLite.R")
-biocLite("vulcandata")
-biocLite("vulcan")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("vulcandata")
+BiocManager::install("vulcan")
 @
 
 %----
