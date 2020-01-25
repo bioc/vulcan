@@ -4,8 +4,8 @@
 \alias{val2col}
 \title{Convert a numeric vector into colors}
 \usage{
-val2col(z, col1 = "navy", col2 = "white", col3 = "red3", nbreaks = 100,
-  center = TRUE, rank = FALSE)
+val2col(z, col1 = "navy", col2 = "white", col3 = "red3",
+  nbreaks = 100, center = TRUE, rank = FALSE)
 }
 \arguments{
 \item{z}{a vector of numbers}

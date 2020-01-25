@@ -11,7 +11,7 @@ C:\Users\feder\.ssh\config
 Host bioconductor.org
 Hostname bioconductor.org
 User git
-IdentityFile /d/Dropbox/rstudio/github/id_rsa
+IdentityFile /d/Dropbox/projects/github/id_rsa
 PreferredAuthentications publickey
 
 # It turns out on the laptop it works if you use this instead:
