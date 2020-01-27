@@ -1,4 +1,3 @@
-new for version 1.9.1
+new for version 1.9.3
 =====================
-* The package has been published in Genome Biology. Citation has been updated accordingly
-* Minor bug fixes to allow the tool to run with non-human genomes
+* Minor udpates in the package description and vignette
