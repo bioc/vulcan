@@ -36,13 +36,13 @@ importFrom('gplots','colorpanel')
 importFrom('caTools','runmean')
 importFrom('csaw','correlateReads')
 importFrom('wordcloud','wordlayout')
-importFrom('DESeq','newCountDataSet','estimateSizeFactors',
-    'estimateDispersions','varianceStabilizingTransformation')
+importFrom('DESeq2','DESeqDataSetFromMatrix','varianceStabilizingTransformation')
 importFrom('Biobase','exprs')
 importFrom('viper','rowTtest','msviper','msviperAnnot','ttestNull')
 importFrom('DiffBind','dba','dba.count')
 importFrom('graphics', 'abline', 'grid', 'layout', 'legend', 'lines',
     'par', 'plot', 'points', 'rect', 'text')
 importFrom('stats', 'ks.test', 'pchisq', 'pnorm', 'pt', 'qnorm', 'qt',
-    'rnorm', 'setNames', 'quantile', 'var')
+    'rnorm', 'setNames', 'quantile', 'var',
+    'predict', 'smooth.spline')
 importFrom('utils', 'read.csv', 'setTxtProgressBar', 'txtProgressBar', 'relist')

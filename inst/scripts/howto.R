@@ -30,7 +30,7 @@ cat("importFrom('gplots','colorpanel')\n",file="NAMESPACE",append=TRUE)
 cat("importFrom('caTools','runmean')\n",file="NAMESPACE",append=TRUE)
 cat("importFrom('csaw','correlateReads')\n",file="NAMESPACE",append=TRUE)
 cat("importFrom('wordcloud','wordlayout')\n",file="NAMESPACE",append=TRUE)
-cat("importFrom('DESeq','newCountDataSet','estimateSizeFactors',\n    'estimateDispersions','varianceStabilizingTransformation')\n",
+cat("importFrom('DESeq2','DESeqDataSetFromMatrix','varianceStabilizingTransformation')\n",
     file="NAMESPACE",append=TRUE)
 cat("importFrom('Biobase','exprs')\n",file="NAMESPACE",append=TRUE)
 cat("importFrom('viper','rowTtest','msviper','msviperAnnot','ttestNull')\n",file="NAMESPACE",append=TRUE)
@@ -41,9 +41,14 @@ cat("importFrom('DiffBind','dba','dba.count')\n",file="NAMESPACE",append=TRUE)
 
 cat("importFrom('graphics', 'abline', 'grid', 'layout', 'legend', 'lines',\n    'par', 'plot', 'points', 'rect', 'text')\n",
     file="NAMESPACE",append=TRUE)
-cat("importFrom('stats', 'ks.test', 'pchisq', 'pnorm', 'pt', 'qnorm', 'qt',\n    'rnorm', 'setNames', 'quantile', 'var')\n",
+cat("importFrom('stats', 'ks.test', 'pchisq', 'pnorm', 'pt', 'qnorm', 'qt',\n    'rnorm', 'setNames', 'quantile', 'var',\n    'predict', 'smooth.spline')\n",
     file="NAMESPACE",append=TRUE)
 cat("importFrom('utils', 'read.csv', 'setTxtProgressBar', 'txtProgressBar', 'relist')\n",
     file="NAMESPACE",append=TRUE)
 
+build()
+
+library(BiocCheck)
+#BiocCheck("/Users/giorgi01/Dropbox/rstudio/vulcanpackage/vulcan")
+BiocCheck(getwd())
 

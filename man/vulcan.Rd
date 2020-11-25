@@ -50,7 +50,7 @@ ChIP-Seq derived signature
 \examples{
 library(vulcandata)
 # Get an example vulcan object (generated with vulcan.import() using the
-# dummy dataset contained in the \\textit{vulcandata} package)
+# dummy dataset contained in the \textit{vulcandata} package)
 vobj<-vulcandata::vulcanexample()
 # Annotate peaks to gene names
 vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')

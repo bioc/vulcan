@@ -4,9 +4,13 @@
 \alias{vulcan.annotate}
 \title{Function to annotate peaks for VULCAN analysis}
 \usage{
-vulcan.annotate(vobj, lborder = -10000, rborder = 10000,
-  method = c("closest", "strongest", "sum", "topvar", "farthest",
-  "lowvar"), TxDb = NULL)
+vulcan.annotate(
+  vobj,
+  lborder = -10000,
+  rborder = 10000,
+  method = c("closest", "strongest", "sum", "topvar", "farthest", "lowvar"),
+  TxDb = NULL
+)
 }
 \arguments{
 \item{vobj}{A list of peakcounts, samples and peakrpkms (i.e. the output of

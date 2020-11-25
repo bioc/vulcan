@@ -4,8 +4,17 @@
 \alias{textplot2}
 \title{textplot2 - An x y plot of non-overlapping text}
 \usage{
-textplot2(x, y, words, cex = 1, pch = 16, pointcolor = "#FFFFFF00",
-  new = TRUE, show.lines = TRUE, ...)
+textplot2(
+  x,
+  y,
+  words,
+  cex = 1,
+  pch = 16,
+  pointcolor = "#FFFFFF00",
+  new = TRUE,
+  show.lines = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{x coordinates}

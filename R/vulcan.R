@@ -375,19 +375,66 @@ vulcan.normalize <- function(vobj) {
     allsamples <- unique(unlist(samples))
     allgenes <- rownames(rawcounts)
 
-    # Generate a normalized abundance object
-    conditions <- c()
-    for (i in seq_len(length(samples))) {
-        conditions <- c(conditions, rep(names(samples)[i],
-                                        length(samples[[i]])))
+    # # Generate a normalized abundance object
+    # conditions <- c()
+    # for (i in seq_len(length(samples))) {
+    #     conditions <- c(conditions, rep(names(samples)[i],
+    #                                     length(samples[[i]])))
+    # }
+    # conditions <- factor(conditions)
+    # cds <- DESeq::newCountDataSet(vobj$rawcounts, conditions)
+    # cds <- DESeq::estimateSizeFactors(cds)
+    # cds <- DESeq::estimateDispersions(cds, fitType = "local")
+    # vsd <- DESeq::varianceStabilizingTransformation(cds)
+    # normalized <- Biobase::exprs(vsd)
+    # rownames(normalized) <- rownames(rawcounts)
+
+    # Accessory functions
+    f.rvar.na <- function(x) {
+        ave <- as.vector(f.rmean.na(x))
+        pos <- which(is.na(x))
+        largo <- f.rlength.na(x)
+        x[pos] <- rep(ave,ncol(x))[pos]
+        (x-ave)^2 %*% rep(1,ncol(x))/(largo-1)
     }
-    conditions <- factor(conditions)
-    cds <- DESeq::newCountDataSet(vobj$rawcounts, conditions)
-    cds <- DESeq::estimateSizeFactors(cds)
-    cds <- DESeq::estimateDispersions(cds, fitType = "local")
-    vsd <- DESeq::varianceStabilizingTransformation(cds)
-    normalized <- Biobase::exprs(vsd)
-    rownames(normalized) <- rownames(rawcounts)
+    f.rmean.na <- function(x) {
+        largo <- f.rlength.na(x)
+        x[is.na(x)] <- 0
+        res <- x %*% rep(1,ncol(x)) / largo
+        names(res) <- rownames(x)
+        res
+    }
+    f.rlength.na <- function(x) {
+        r <- x/x
+        r[x==0] <- 1
+        r[!is.finite(r)] <- 0
+        r %*% rep(1,ncol(r))
+    }
+
+    # Normalization based on DESeq2
+    set.seed(1)
+    coldata<-as.data.frame(colnames(rawcounts))
+    coldata[,1]<-as.factor(coldata[,1])
+    colnames(coldata)<-"samplename"
+    x<-DESeq2::DESeqDataSetFromMatrix(countData=rawcounts,
+                              colData=coldata,
+                              design=~samplename
+    )
+    x<-DESeq2::varianceStabilizingTransformation(x,blind=TRUE)
+    x<-assay(x)
+    #
+    tmp <- apply(x, 2, function(x) {
+        x <- sort(unique(x))
+        x <- cbind(x[1:(length(x)-1)], x[2:length(x)])
+        x <- cbind(x[, 1], sqrt(f.rvar.na(x)))
+        return(x)
+    })
+    tmp <- cbind(unlist(lapply(tmp, function(x) x[, 1]), use.names=F), unlist(lapply(tmp, function(x) x[, 2]), use.names=F))
+    tmp1 <- stats::smooth.spline(tmp[, 1], tmp[, 2], spar=.5)
+    tmp[tmp[, 1]>tmp1$x[which.min(tmp1$y)], 2] <- 0
+    tmp1 <- stats::smooth.spline(tmp[, 1], tmp[, 2], spar=.5)
+    normalized<-x+rnorm(length(x))*stats::predict(tmp1, x)$y
+    #
     vobj$normalized <- normalized
     return(vobj)
 }

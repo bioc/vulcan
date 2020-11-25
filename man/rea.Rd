@@ -4,8 +4,7 @@
 \alias{rea}
 \title{REA: Rank EnrichmeNt Analysis}
 \usage{
-rea(signatures, groups, sweights = NULL, gweights = NULL,
-  minsize = 1)
+rea(signatures, groups, sweights = NULL, gweights = NULL, minsize = 1)
 }
 \arguments{
 \item{signatures}{a named vector, with values as signature values

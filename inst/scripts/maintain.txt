@@ -7,12 +7,19 @@ http://master.bioconductor.org/developers/how-to/git/faq/
 D:\Programs\Git\etc\ssh\ssh_config
 # Or here
 C:\Users\feder\.ssh\config
+# Or here
+C:\Program Files\Git\etc\ssh\ssh_config
+
 # I edited it by adding this text:
 Host bioconductor.org
 Hostname bioconductor.org
 User git
 IdentityFile /d/Dropbox/projects/github/id_rsa
 PreferredAuthentications publickey
+
+
+
+
 
 # It turns out on the laptop it works if you use this instead:
 # I copied my id_rsa and id_rsa public in C:\Users\feder\.ssh
@@ -24,9 +31,14 @@ User git
 PreferredAuthentications publickey
 
 
-cd /d/Dropbox/rstudio/github/bioconductor
+# Password is atlanta
+cd /d/Dropbox/projects/github/bioconductor/
 git clone git@git.bioconductor.org:packages/vulcan
 git clone git@git.bioconductor.org:packages/vulcandata
+
+# Or, Update existing
+cd /d/Dropbox/projects/github/bioconductor/vulcan
+git pull
 
 # edit file, e.g., `vi DESCRIPTION`
 cd /d/Dropbox/rstudio/github/bioconductor/vulcandata

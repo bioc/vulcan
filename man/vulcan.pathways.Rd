@@ -4,8 +4,13 @@
 \alias{vulcan.pathways}
 \title{Function to calculate pathway enrichment over a ChIP-Seq profile}
 \usage{
-vulcan.pathways(vobj, pathways, contrast = NULL, method = c("GSEA",
-  "REA"), np = 1000)
+vulcan.pathways(
+  vobj,
+  pathways,
+  contrast = NULL,
+  method = c("GSEA", "REA"),
+  np = 1000
+)
 }
 \arguments{
 \item{vobj}{a list, the output of the \code{'vulcan.annotate'} function}
