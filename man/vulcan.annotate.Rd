@@ -8,7 +8,7 @@ vulcan.annotate(
   vobj,
   lborder = -10000,
   rborder = 10000,
-  method = c("closest", "strongest", "sum", "topvar", "farthest", "lowvar"),
+  method = c("sum", "closest", "strongest", "topvar", "farthest", "lowvar"),
   TxDb = NULL
 )
 }

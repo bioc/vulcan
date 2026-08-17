@@ -1,9 +1,12 @@
 Package: vulcan
 Type: Package
 Title: VirtUaL ChIP-Seq data Analysis using Networks
-Version: 1.35.0
-Author: Federico M. Giorgi, Andrew N. Holding, Florian Markowetz
-Maintainer: Federico M. Giorgi <federico.giorgi@gmail.com>
+Version: 1.35.1
+Authors@R: c(
+    person("Federico M.", "Giorgi", role = c("aut", "cre"),
+           email = "federico.giorgi@gmail.com"),
+    person("Andrew N.", "Holding", role = "aut"),
+    person("Florian", "Markowetz", role = "aut"))
 Description: Vulcan (VirtUaL ChIP-Seq Analysis through Networks) is a package
     that interrogates gene regulatory networks to infer cofactors
     significantly enriched in a differential binding signature coming from
@@ -21,6 +24,6 @@ Suggests: vulcandata
 Depends: R (>= 4.0), ChIPpeakAnno,TxDb.Hsapiens.UCSC.hg19.knownGene, zoo,
     GenomicRanges, S4Vectors, viper, DiffBind, locfit
 Imports: wordcloud, csaw, gplots, stats, utils,
-    caTools, graphics, DESeq2, Biobase
+    caTools, graphics, DESeq2, Biobase, SummarizedExperiment
 Encoding: UTF-8
 RoxygenNote: 7.1.1

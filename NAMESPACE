@@ -38,6 +38,7 @@ importFrom('csaw','correlateReads')
 importFrom('wordcloud','wordlayout')
 importFrom('DESeq2','DESeqDataSetFromMatrix','varianceStabilizingTransformation')
 importFrom('Biobase','exprs')
+importFrom('SummarizedExperiment','assay')
 importFrom('viper','rowTtest','msviper','msviperAnnot','ttestNull')
 importFrom('DiffBind','dba','dba.count')
 importFrom('graphics', 'abline', 'grid', 'layout', 'legend', 'lines',

@@ -122,9 +122,12 @@ slice <- function(matrix) {
 corr2p <- function(r, N) {
     # Get the t-distribution value
     t <- r/sqrt((1 - r^2)/(N - 2))
-    # t follows the t distribution with
-    # df=N?2
-    p <- 1 - pt(abs(t), N - 2)
+    # t follows the t distribution with df=N-2.
+    # The upper tail is asked for directly rather than as 1-pt(): the
+    # subtraction loses every digit once pt() approaches 1, so strong
+    # correlations used to come back as exactly 0. For r=0.999 and N=100
+    # this returned 0 where the true value is 2.2e-134
+    p <- pt(abs(t), N - 2, lower.tail = FALSE)
     return(p)
 }
 
@@ -157,7 +160,7 @@ p2corr <- function(p, N) {
 #' @param col1 a color name for the min value, default 'navy'
 #' @param col2 a color name for the middle value, default 'white'
 #' @param col3 a color name for the max value, default 'red3'
-#' @param nbreaks Number of colors to be generated. Default is 30.
+#' @param nbreaks Number of colors to be generated. Default is 100.
 #' @param center boolean, should the data be centered? Default is TRUE
 #' @param rank boolean, should the data be ranked? Default is FALSE
 #' @return a vector of colors
@@ -181,15 +184,31 @@ val2col <- function(z, col1 = "navy", col2 = "white",
         z <- rank(z)
     }
     if (center) {
-        extreme = round(max(abs(z)))
-        breaks <- seq(-extreme, extreme, length = nbreaks)
+        # The data has to be centered BEFORE the extent of the scale is
+        # measured. Measuring max(abs(z)) first and shifting z afterwards
+        # left every value crowded into the middle bins, so
+        # val2col(c(100,101,102)) came back as one single color for all
+        # three. round() is gone from the extreme too: it collapsed the
+        # range to 0 for data varying by less than half a unit, and cut()
+        # then failed outright with "'breaks' are not unique"
         z <- z - mean(z)
+        extreme <- max(abs(z))
+        if (extreme == 0) {
+            extreme <- 1
+        }
+        breaks <- seq(-extreme, extreme, length = nbreaks)
     } else {
-        breaks <- seq(min(z), max(z), length = nbreaks)
+        if (min(z) == max(z)) {
+            breaks <- seq(min(z) - 1, max(z) + 1, length = nbreaks)
+        } else {
+            breaks <- seq(min(z), max(z), length = nbreaks)
+        }
     }
     ncol <- length(breaks) - 1
     col <- gplots::colorpanel(ncol, col1, col2, col3)
-    CUT <- cut(z, breaks = breaks)
+    # include.lowest, or the smallest value sits on the edge of the first
+    # interval, falls outside it, and is returned with no color at all
+    CUT <- cut(z, breaks = breaks, include.lowest = TRUE)
     # assign colors to heights for each point
     colorlevels <- col[match(CUT, levels(CUT))]
     names(colorlevels) <- names(z)
@@ -225,9 +244,13 @@ val2col <- function(z, col1 = "navy", col2 = "white",
 #' axis(2,at=pretty(a),labels=kmg)
 #' @export
 kmgformat <- function(input, roundParam = 1) {
-    signs <- sign(input)
-    signs[signs == 1] <- ""
-    signs[signs == -1] <- "-"
+    # Only negative numbers get a sign in front of them. This used to be
+    # built from sign(), which returns 0 for zero: that 0 survived as the
+    # character "0" and was pasted in front of the formatted value, so
+    # kmgformat(0) returned "00". Zero is in the output of pretty() most
+    # of the time, so it reached any axis drawn this way
+    signs <- rep("", length(input))
+    signs[input < 0] <- "-"
     absinput <- abs(input)
     output <- c()
     for (i in absinput) {
@@ -370,7 +393,11 @@ average_fragment_length <- function(bam.files,
     x <- csaw::correlateReads(bam.files, max.dist = max.dist)
     # visualize (raw and smoothed)
     xs <- caTools::runmean(Rle(x), k = 101, endrule = "constant")
-    frag.len <- which.max(xs)
+    # correlateReads returns max.dist+1 coefficients, for the delays 0 to
+    # max.dist, so position i in the vector is a delay of i-1 bp. Without
+    # the -1 the reported fragment length was one base longer than the
+    # delay the blue line is drawn at
+    frag.len <- which.max(xs) - 1
     if (plot) {
         plot(0:max.dist, x, pch = "*", ylab = "CCF", xlab = "Delay (bp)")
         lines(0:max.dist, xs, col = "red", lwd = 3)

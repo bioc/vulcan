@@ -1,3 +1,27 @@
+new for version 1.35.1
+======================
+* gsea(), vulcan.annotate() and vulcan.pathways() now resolve their 'method'
+  argument with match.arg(). Called without naming a method, as their own
+  documentation describes, each one reached an if() on a vector of length
+  greater than one, which is an error in R >= 4.2
+* null_gsea() no longer fails when a permutation places the whole set on
+  elements of weight zero, which left the running score undefined
+* gsea() accepts a null distribution given as a named list keyed by set
+  size. The test that was meant to detect one named a class that nothing
+  ever produced, and could itself error when handed a matrix
+* corr2p() asks for the upper tail directly instead of subtracting from
+  one, and so no longer returns exactly 0 for strong correlations
+* kmgformat() returns "0" rather than "00" for zero, which pretty() puts on
+  most axes
+* val2col() centres the data before measuring the extent of the colour
+  scale, no longer fails on data with a small range, and no longer returns
+  the smallest value without a colour
+* average_fragment_length() corrects an off-by-one: correlateReads() counts
+  delays from 0, so the reported length was one base too long
+* assay() is imported from SummarizedExperiment rather than relied upon
+  being attached by something else
+* DESCRIPTION uses Authors@R
+
 new for version 1.9.3
 =====================
 * Minor udpates in the package description and vignette

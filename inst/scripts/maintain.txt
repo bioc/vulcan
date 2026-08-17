@@ -14,7 +14,7 @@ C:\Program Files\Git\etc\ssh\ssh_config
 Host bioconductor.org
 Hostname bioconductor.org
 User git
-IdentityFile /d/Dropbox/projects/github/id_rsa
+IdentityFile /d/Drive/projects/github/id_rsa
 PreferredAuthentications publickey
 
 
@@ -32,35 +32,35 @@ PreferredAuthentications publickey
 
 
 # Password is atlanta
-cd /d/Dropbox/projects/github/bioconductor/
+cd /d/Drive/projects/github/
 git clone git@git.bioconductor.org:packages/vulcan
 git clone git@git.bioconductor.org:packages/vulcandata
 
 # Or, Update existing
-cd /d/Dropbox/projects/github/bioconductor/vulcan
+cd /d/Drive/projects/github/vulcan
 git pull
 
 # edit file, e.g., `vi DESCRIPTION`
-cd /d/Dropbox/rstudio/github/bioconductor/vulcandata
+cd /d/Drive/projects/github/vulcandata
 git commit DESCRIPTION
 git push
 
 # Edit and add a file
-cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+cd /d/Drive/projects/github/vulcan
 git add inst/scripts/maintain.txt
 git commit vignettes/vulcan.Rnw inst/scripts/maintain.txt
 git commit . -m 'Update'
 git push
 
 # If the repository is already cloned, the work flow is to make sure that you are on the ‘master’ branch, pull any changes, then introduce your edits.
-cd /d/Dropbox/rstudio/github/bioconductor/vulcan
+cd /d/Drive/projects/github/vulcan
 git checkout master
 git pull
 ## add, edit, commit, and push as above
 
 
 # Just commit and push everything
-cd /d/Dropbox/projects/github/bioconductor/vulcan
+cd /d/Drive/projects/github/vulcan
 # cd /c/Users/fmg2117/Dropbox/rstudio/github/bioconductor/vulcan
 git commit * -m 'Fixed citations'
 git push

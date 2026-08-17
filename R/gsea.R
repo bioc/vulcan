@@ -28,6 +28,11 @@ gsea <- function(reflist,
                 w=1,
                 gsea_null=NULL) {
 
+    # Resolve the method against its allowed values. Without this, calling
+    # gsea() without naming a method leaves 'method' as the full default
+    # vector, and the if(method=="pareto") below is then a condition of
+    # length 2, which is an error in R >= 4.2
+    method <- match.arg(method)
 
     # Get elements in set that are in the ref list
     set <- intersect(names(reflist), set)
@@ -85,7 +90,9 @@ gsea <- function(reflist,
         ledge_indeces <- which(ledge_indeces == 1)
         ledge_names <- names(reflist[ledge_indeces])
     } else{ # Case 2: positive ES
-        peak <- which(running_score==max(running_score)) # Define the peak point
+        # Define the peak point (first one, if the maximum is reached
+        # more than once)
+        peak <- which(running_score==max(running_score))[1]
         # Leading edge is stuff BEFORE the peak point (ES is positive)
         ledge_indeces[1:peak] <- 1
         ledge_indeces <- which(ledge_indeces == 1)
@@ -101,8 +108,17 @@ gsea <- function(reflist,
         null_es<-null_gsea(set=set,reflist=reflist,np=np,w=w)
     } else{
         ### If a null list is provided, use it
-        if(class(gsea_null)=="gsea_nullist"){
-            null_es<-gsea_null[as.character(length(set))][[1]]
+        # The null distribution can be given either as a plain vector of
+        # null enrichment scores (e.g. the output of null_gsea), or as a
+        # named list of such vectors keyed by set size.
+        # Testing this with class(gsea_null)=="..." was wrong twice over:
+        # the name tested for was never assigned to any object by this
+        # package, so the branch could not be taken, and class() may return
+        # more than one string (e.g. c("matrix","array")), which makes if()
+        # an error in R >= 4.2
+        setkey <- as.character(length(set))
+        if(is.list(gsea_null) && setkey%in%names(gsea_null)){
+            null_es<-gsea_null[[setkey]]
         }else{
             null_es<-gsea_null
         }
@@ -117,7 +133,9 @@ gsea <- function(reflist,
 
     # If we are in the tail, the p-value can be calculated in two ways
     if(is.na(p.value) || p.value<0.05) {
-        if(p.value==0){
+        # The is.na test above lets an NA p-value reach this point, and
+        # if(NA==0) is an error, so the NA has to be excluded here too
+        if(!is.na(p.value) && p.value==0){
             p.value <- 1/np
         }
         if (method=="pareto"){
@@ -189,6 +207,16 @@ null_gsea<-function(set,reflist,w=1,np=1000){
         # And dependending on the cumulative sums, null running sum and
         # null enrichment score
         null_running_score <- null_hit - null_miss
+
+        # Same safety measure as in gsea(): when the permuted set lands
+        # entirely on elements whose weight is 0, the cumulative sum of
+        # hits ends at 0 and dividing by it gives NaN throughout, which
+        # makes the if() below an error. This is not a rare corner: with a
+        # set of 5 among 25 elements of which 20 weigh 0, it happens in
+        # 29% of permutations
+        if(all(is.na(null_running_score))){
+            null_running_score<-rep(0,length(null_running_score))
+        }
 
         # The ES is just he maximum or the minimum
         if(abs(max(null_running_score))>abs(min(null_running_score))){

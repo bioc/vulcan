@@ -148,13 +148,19 @@ vulcan.import <- function(sheetfile, intervals = NULL) {
 #' vobj<-vulcan.annotate(vobj,lborder=-10000,rborder=10000,method='sum')
 #' @export
 vulcan.annotate <- function(vobj, lborder = -10000,
-                            rborder = 10000, method = c("closest",
+                            rborder = 10000, method = c("sum",
+                                                        "closest",
                                                         "strongest",
-                                                        "sum",
                                                         "topvar",
                                                         "farthest",
                                                         "lowvar"),
                             TxDb=NULL) {
+
+    # Resolve the method against its allowed values. Without this, calling
+    # vulcan.annotate() without naming a method left 'method' as the full
+    # six-element default vector, and the checks inside dist_calc() were
+    # then conditions of length 6, which is an error in R >= 4.2
+    method <- match.arg(method)
 
     if(!is.null(TxDb)){
         # Annotate (any genome)
@@ -417,11 +423,14 @@ vulcan.normalize <- function(vobj) {
     coldata[,1]<-as.factor(coldata[,1])
     colnames(coldata)<-"samplename"
     x<-DESeq2::DESeqDataSetFromMatrix(countData=rawcounts,
-                              colData=coldata,
-                              design=~samplename
+        colData=coldata,
+        design=~samplename
     )
     x<-DESeq2::varianceStabilizingTransformation(x,blind=TRUE)
-    x<-assay(x)
+    # Qualified: assay() belongs to SummarizedExperiment, which this
+    # package never imported. It resolved only because something else in
+    # the dependency chain happened to attach that package
+    x<-SummarizedExperiment::assay(x)
     #
     tmp <- apply(x, 2, function(x) {
         x <- sort(unique(x))
@@ -429,7 +438,10 @@ vulcan.normalize <- function(vobj) {
         x <- cbind(x[, 1], sqrt(f.rvar.na(x)))
         return(x)
     })
-    tmp <- cbind(unlist(lapply(tmp, function(x) x[, 1]), use.names=F), unlist(lapply(tmp, function(x) x[, 2]), use.names=F))
+    tmp <- cbind(
+        unlist(lapply(tmp, function(x) x[, 1]), use.names=FALSE),
+        unlist(lapply(tmp, function(x) x[, 2]), use.names=FALSE)
+    )
     tmp1 <- stats::smooth.spline(tmp[, 1], tmp[, 2], spar=.5)
     tmp[tmp[, 1]>tmp1$x[which.min(tmp1$y)], 2] <- 0
     tmp1 <- stats::smooth.spline(tmp[, 1], tmp[, 2], spar=.5)
@@ -574,6 +586,10 @@ vulcan <- function(vobj, network, contrast, annotation = NULL,
 vulcan.pathways <- function(vobj, pathways,
                             contrast = NULL,
                             method = c("GSEA", "REA"), np=1000) {
+    # As in vulcan.annotate(): unresolved, the default is a two-element
+    # vector and if(method=="GSEA") is an error in R >= 4.2
+    method <- match.arg(method)
+
     normalized <- vobj$normalized
     samples <- vobj$samples
     allgenes <- unique(unlist(pathways))
